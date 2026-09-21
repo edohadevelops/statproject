@@ -137,8 +137,8 @@ function Math_({ tex, block, style }) {
    Fill in your own project's URL and anon key below once you've
    created it — everything else works as soon as those two lines
    are real. */
-const SUPABASE_URL = "YOUR_SUPABASE_URL_HERE";
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY_HERE";
+const SUPABASE_URL = "https://stfczlujttygfdapmsof.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0ZmN6bHVqdHR5Z2ZkYXBtc29mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg5NjY2MDUsImV4cCI6MjEwNDU0MjYwNX0.qNAMVThlaA5YRdTyrlKKyXj3BP5PTLm-Lerr_Pd2vcI";
 const SB_HEADERS = { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` };
 
 const pendingWrites = new Map();
