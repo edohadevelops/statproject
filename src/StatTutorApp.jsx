@@ -119,7 +119,7 @@ function Math_({ tex, block, style }) {
   if (!tex.includes("$")) {
     return <PureMath tex={tex} block={block} style={style} />;
   }
-  const parts = tex.split(/(\$[^$]+\$)/g).filter((p) => p.length > 0);
+  const parts = tex.split(/(\\$[^$]+\\$)/g).filter((p) => p.length > 0);
   return (
     <div style={{ display: block ? "block" : "inline", margin: block ? "8px 0" : 0, lineHeight: 1.6, ...style }}>
       {parts.map((part, i) =>
@@ -137,8 +137,8 @@ function Math_({ tex, block, style }) {
    Fill in your own project's URL and anon key below once you've
    created it — everything else works as soon as those two lines
    are real. */
-const SUPABASE_URL = "https://stfczlujttygfdapmsof.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0ZmN6bHVqdHR5Z2ZkYXBtc29mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg5NjY2MDUsImV4cCI6MjEwNDU0MjYwNX0.qNAMVThlaA5YRdTyrlKKyXj3BP5PTLm-Lerr_Pd2vcI";
+const SUPABASE_URL = "YOUR_SUPABASE_URL_HERE";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY_HERE";
 const SB_HEADERS = { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` };
 
 const pendingWrites = new Map();
@@ -231,7 +231,7 @@ const SESSIONS = [
   { id: 3, title: "Moments, MGFs & Common Distributions", lectures: "Lec 3", type: "review" },
   { id: 4, title: "Gamma & Beta Distributions", lectures: "Lec 4", type: "review" },
   { id: 5, title: "Exponential Distribution, Inequalities & CLT", lectures: "Lec 5", type: "review" },
-  { id: 6, title: "Parameter Estimation & Method of Moments", lectures: "Lec 6-7", type: "new", test: "Test 1 likely covers through here" },
+  { id: 6, title: "Parameter Estimation & Method of Moment", lectures: "Lec 6-7", type: "new", test: "Test 1 likely covers through here" },
   { id: 7, title: "Maximum Likelihood Estimation", lectures: "Lec 8-11", type: "new", test: "Test 1 likely covers through here" },
   { id: 8, title: "Sufficient Statistics & Factorization Theorem", lectures: "Lec 13-15", type: "new" },
   { id: 9, title: "Exponential Family of Distributions", lectures: "Lec 16-17", type: "new" },
@@ -273,12 +273,12 @@ const FORMULAS = [
   {
     id: "f3", cat: "Foundations", name: "k-th Moment",
     formula: "\\mu_k = E(X^k) = \\int x^k f(x|\\theta)\\,dx \\quad \\text{(or} \\sum x^k p(x|\\theta) \\text{ if discrete)}",
-    why: "A 'moment' is just an expectation of a power of $X$ — the building block for Method of Moments.",
+    why: "A 'moment' is just an expectation of a power of $X$ — the building block for Method of Moment.",
     when: "$k=1$ gives the mean; $k=2$ relates to variance via $\\text{Var}(X)=\\mu_2-\\mu_1^2$.",
     example: "Uniform on $[0,\\theta]$: $\\mu_1=E(X)=\\theta/2$.",
   },
   {
-    id: "f4", cat: "Estimation", name: "Method of Moments Recipe",
+    id: "f4", cat: "Estimation", name: "Method of Moment Recipe",
     formula: "\\mu_k = m_k, \\quad \\text{where } m_k = \\frac1n\\sum_{i=1}^n X_i^k",
     why: "Set the theoretical moment (has $\\theta$ in it) equal to the sample moment (a real number from data), then solve for $\\theta$.",
     when: "Pick the smallest $k$ for which $\\mu_k$ actually contains the unknown parameter.",
@@ -328,7 +328,7 @@ const FORMULAS = [
 const FLASHCARDS_BASE = [
   { id: "fc1", cat: "Foundations", front: "CDF definition: $F(x) = \\ ?$", back: "$P(X \\leq x)$" },
   { id: "fc2", cat: "Foundations", front: "For a continuous $X$, how do you compute $P(a \\leq X \\leq b)$?", back: "$\\displaystyle\\int_a^b f(x)\\,dx$" },
-  { id: "fc3", cat: "Estimation", front: "Method of Moments: what equation do you solve?", back: "$\\mu_k = m_k$ — theoretical moment equals sample moment" },
+  { id: "fc3", cat: "Estimation", front: "Method of Moment: what equation do you solve?", back: "$\\mu_k = m_k$ — theoretical moment equals sample moment" },
   { id: "fc4", cat: "Estimation", front: "MoM 'second rule' for choosing $k$?", back: "Pick the smallest $k$ such that $\\mu_k$ actually contains the unknown parameter $\\theta$." },
   { id: "fc5", cat: "Estimation", front: "Likelihood function $L(\\theta) = \\ ?$", back: "$\\displaystyle\\prod_{i=1}^n f(x_i|\\theta)$" },
   { id: "fc6", cat: "Estimation", front: "Why do we maximize $\\log L(\\theta)$ instead of $L(\\theta)$ directly?", back: "Log turns the product into a sum (easier to differentiate), and since log is increasing, the maximizer is the same." },
@@ -373,13 +373,13 @@ const SESSION_CONCEPTS = {
   }],
   5: [{
     title: "Exponential Distribution, Inequalities & CLT",
-    body: "The exponential distribution, $f(x|\\beta)=\\frac1\\beta e^{-x/\\beta}$, models waiting times — it has the memoryless property. Markov's Inequality ($P(X\\geq a) \\leq E(X)/a$ for nonnegative $X$) and Chebyshev's Inequality ($P(|X-\\mu|\\geq k\\sigma) \\leq 1/k^2$) give crude but distribution-free bounds on tail probabilities. The Law of Large Numbers says sample averages converge to the true mean as $n\\to\\infty$ — this is precisely why Method of Moments works at all.",
+    body: "The exponential distribution, $f(x|\\beta)=\\frac1\\beta e^{-x/\\beta}$, models waiting times — it has the memoryless property. Markov's Inequality ($P(X\\geq a) \\leq E(X)/a$ for nonnegative $X$) and Chebyshev's Inequality ($P(|X-\\mu|\\geq k\\sigma) \\leq 1/k^2$) give crude but distribution-free bounds on tail probabilities. The Law of Large Numbers says sample averages converge to the true mean as $n\\to\\infty$ — this is precisely why Method of Moment works at all.",
     formulaIds: [],
-    keyIdea: "The Law of Large Numbers is the theoretical justification behind Method of Moments: $m_k \\to \\mu_k$ in probability as $n\\to\\infty$, so equating them is a reasonable thing to do.",
+    keyIdea: "The Law of Large Numbers is the theoretical justification behind Method of Moment: $m_k \\to \\mu_k$ in probability as $n\\to\\infty$, so equating them is a reasonable thing to do.",
   }],
   6: [{
-    title: "Parameter Estimation & Method of Moments",
-    body: "An estimator is a formula $\\delta(X_1,\\ldots,X_n)$ that turns a sample into a guess for an unknown parameter $\\theta$. Method of Moments is the oldest, simplest recipe: compute the theoretical moment $\\mu_k=E(X^k)$ (contains $\\theta$), compute the sample moment $m_k=\\frac1n\\sum X_i^k$ (a real number from your data), set them equal, and solve for $\\theta$. If there are $p$ unknown parameters, do this $p$ times using $k=1,\\ldots,p$.",
+    title: "Parameter Estimation & Method of Moment",
+    body: "An estimator is a formula $\\delta(X_1,\\ldots,X_n)$ that turns a sample into a guess for an unknown parameter $\\theta$. Method of Moment is the oldest, simplest recipe: compute the theoretical moment $\\mu_k=E(X^k)$ (contains $\\theta$), compute the sample moment $m_k=\\frac1n\\sum X_i^k$ (a real number from your data), set them equal, and solve for $\\theta$. If there are $p$ unknown parameters, do this $p$ times using $k=1,\\ldots,p$.",
     formulaIds: ["f4"],
     keyIdea: "Two rules for picking $k$: prefer small $k$ (easier to compute), and $\\mu_k$ must actually contain $\\theta$ — if it doesn't (like $E(X)=0$ for a symmetric distribution), move to a higher $k$.",
     yt: null,
@@ -412,169 +412,169 @@ const SESSION_CONCEPTS = {
 ============================================================ */
 const WORKED_EXAMPLES = {
   6: [
-    { id: "we6-ex1", tex: "\text{Discrete } X: P(0)=\tfrac{2\theta}{3}, P(1)=\tfrac{\theta}{3}, P(2)=\tfrac{2(1-\theta)}{3}, P(3)=\tfrac{1-\theta}{3}. \text{ Data: } 3,0,2,1,3,2,1,0,2,1. \text{ Find } \hat\theta.", answer: "\hat\theta = \tfrac{5}{12}", steps: [
-      { tex: "Compute $E(X)$ by multiplying each value by its probability and adding: $E(X) = 0\cdot\tfrac{2\theta}{3} + 1\cdot\tfrac{\theta}{3} + 2\cdot\tfrac{2(1-\theta)}{3} + 3\cdot\tfrac{1-\theta}{3}$.", why: "General rule: for a discrete random variable, $E(X)=\sum x\,P(x)$ — multiply every value by its own probability, then add everything up." },
-      { tex: "Expand each term: $0$; $\tfrac{\theta}{3}$; $\tfrac{4(1-\theta)}{3}=\tfrac{4-4\theta}{3}$; $(1-\theta)$.", why: "Simplify the coefficients one piece at a time before combining — trying to add four unsimplified fractions at once is where arithmetic mistakes happen." },
-      { tex: "Add the fraction terms over a common denominator of 3: $\tfrac{\theta}{3}+\tfrac{4-4\theta}{3} = \tfrac{4-3\theta}{3}$. Then add $(1-\theta)=\tfrac{3-3\theta}{3}$: $\tfrac{4-3\theta}{3}+\tfrac{3-3\theta}{3}=\tfrac{7-6\theta}{3}$.", why: "General rule: always get a common denominator before adding fractions — writing $(1-\theta)$ as $\tfrac{3-3\theta}{3}$ makes it addable to the others." },
-      { tex: "So $E(X) = \tfrac{7}{3}-2\theta$ (splitting $\tfrac{7-6\theta}{3}$ into $\tfrac73-\tfrac{6\theta}{3}=\tfrac73-2\theta$).", why: "" },
-      { tex: "Compute the sample mean from the data $(3,0,2,1,3,2,1,0,2,1)$: $\bar X = \tfrac{3+0+2+1+3+2+1+0+2+1}{10}=\tfrac{15}{10}=1.5$.", why: "" },
-      { tex: "Set $\tfrac73-2\theta=1.5$. Subtract $\tfrac73$ from both sides: $-2\theta = 1.5-\tfrac73$.", why: "" },
-      { tex: "Convert to sixths: $1.5=\tfrac96$, $\tfrac73=\tfrac{14}{6}$, so $-2\theta=\tfrac96-\tfrac{14}{6}=-\tfrac56$.", why: "General rule: sixths is the natural common denominator whenever you're mixing thirds and halves." },
-      { tex: "Divide both sides by $-2$: $\hat\theta = \tfrac{5}{12}$.", why: "" },
+    { id: "we6-ex1", tex: "\\text{Discrete } X: P(0)=\\tfrac{2\\theta}{3}, P(1)=\\tfrac{\\theta}{3}, P(2)=\\tfrac{2(1-\\theta)}{3}, P(3)=\\tfrac{1-\\theta}{3}. \\text{ Data: } 3,0,2,1,3,2,1,0,2,1. \\text{ Find } \\hat\\theta.", answer: "\\hat\\theta = \\tfrac{5}{12}", steps: [
+      { tex: "Compute $E(X)$ by multiplying each value by its probability and adding: $E(X) = 0\\cdot\\tfrac{2\\theta}{3} + 1\\cdot\\tfrac{\\theta}{3} + 2\\cdot\\tfrac{2(1-\\theta)}{3} + 3\\cdot\\tfrac{1-\\theta}{3}$.", why: "General rule: for a discrete random variable, $E(X)=\\sum x\\,P(x)$ — multiply every value by its own probability, then add everything up." },
+      { tex: "Expand each term: $0$; $\\tfrac{\\theta}{3}$; $\\tfrac{4(1-\\theta)}{3}=\\tfrac{4-4\\theta}{3}$; $(1-\\theta)$.", why: "Simplify the coefficients one piece at a time before combining — trying to add four unsimplified fractions at once is where arithmetic mistakes happen." },
+      { tex: "Add the fraction terms over a common denominator of 3: $\\tfrac{\\theta}{3}+\\tfrac{4-4\\theta}{3} = \\tfrac{4-3\\theta}{3}$. Then add $(1-\\theta)=\\tfrac{3-3\\theta}{3}$: $\\tfrac{4-3\\theta}{3}+\\tfrac{3-3\\theta}{3}=\\tfrac{7-6\\theta}{3}$.", why: "General rule: always get a common denominator before adding fractions — writing $(1-\\theta)$ as $\\tfrac{3-3\\theta}{3}$ makes it addable to the others." },
+      { tex: "So $E(X) = \\tfrac{7}{3}-2\\theta$ (splitting $\\tfrac{7-6\\theta}{3}$ into $\\tfrac73-\\tfrac{6\\theta}{3}=\\tfrac73-2\\theta$).", why: "" },
+      { tex: "Compute the sample mean from the data $(3,0,2,1,3,2,1,0,2,1)$: $\\bar X = \\tfrac{3+0+2+1+3+2+1+0+2+1}{10}=\\tfrac{15}{10}=1.5$.", why: "" },
+      { tex: "Set $\\tfrac73-2\\theta=1.5$. Subtract $\\tfrac73$ from both sides: $-2\\theta = 1.5-\\tfrac73$.", why: "" },
+      { tex: "Convert to sixths: $1.5=\\tfrac96$, $\\tfrac73=\\tfrac{14}{6}$, so $-2\\theta=\\tfrac96-\\tfrac{14}{6}=-\\tfrac56$.", why: "General rule: sixths is the natural common denominator whenever you're mixing thirds and halves." },
+      { tex: "Divide both sides by $-2$: $\\hat\\theta = \\tfrac{5}{12}$.", why: "" },
     ]},
-    { id: "we6-ex2", tex: "\text{Laplace: } f(x|\sigma)=\tfrac{1}{2\sigma}e^{-|x|/\sigma}. \text{ Find the MoM estimator } \hat\sigma.", answer: "\hat\sigma = \sqrt{\dfrac{\sum X_i^2}{2n}}", steps: [
-      { tex: "Try $k=1$ first: $E(X) = \displaystyle\int_{-\infty}^{\infty} x\cdot\tfrac{1}{2\sigma}e^{-|x|/\sigma}\,dx$.", why: "General rule: always try $k=1$ first, since it's the simplest moment — but be ready to abandon it if it fails rule 2." },
-      { tex: "The integrand $x\cdot e^{-|x|/\sigma}$ is an ODD function (flipping the sign of $x$ flips the sign of the whole integrand), integrated over a symmetric interval $(-\infty,\infty)$.", why: "General rule: odd function integrated over a symmetric interval always gives exactly 0 — recognize this shape instantly rather than grinding through the integral." },
-      { tex: "So $E(X)=0$ — this does NOT contain $\sigma$, violating the second rule (the moment must contain the unknown parameter). We must move to $k=2$.", why: "This is exactly the situation the second rule warns about — a real example where $k=1$ genuinely fails." },
-      { tex: "Compute $\mu_2=E(X^2) = \displaystyle\int_{-\infty}^{\infty} x^2\cdot\tfrac{1}{2\sigma}e^{-|x|/\sigma}\,dx$. Since $x^2$ is even, this equals $2\displaystyle\int_0^\infty x^2\cdot\tfrac{1}{2\sigma}e^{-x/\sigma}\,dx = \tfrac{1}{\sigma}\displaystyle\int_0^\infty x^2 e^{-x/\sigma}\,dx$.", why: "General rule: for an even integrand on a symmetric interval, double the integral from 0 to infinity instead — this also gets rid of the absolute value, since $x=|x|$ for $x\geq0$." },
-      { tex: "Substitute $y=x/\sigma$ (so $x=\sigma y$, $dx=\sigma\,dy$): $\tfrac{1}{\sigma}\displaystyle\int_0^\infty (\sigma y)^2 e^{-y}\sigma\,dy = \sigma^2\displaystyle\int_0^\infty y^2 e^{-y}\,dy$.", why: "General rule: this substitution always clears $\sigma$ out of the exponent in exponential-type densities, leaving a standard reference integral." },
-      { tex: "$\displaystyle\int_0^\infty y^2 e^{-y}\,dy = \Gamma(3) = 2! = 2$.", why: "General rule: memorize $\int_0^\infty y^k e^{-y}dy=k!$ for integer $k$ — here $k=2$." },
-      { tex: "So $\mu_2 = 2\sigma^2$. Set $2\sigma^2 = m_2 = \tfrac1n\sum X_i^2$, and solve: $\sigma^2 = \tfrac{\sum X_i^2}{2n}$, so $\hat\sigma = \sqrt{\dfrac{\sum X_i^2}{2n}}$.", why: "" },
+    { id: "we6-ex2", tex: "\\text{Laplace: } f(x|\\sigma)=\\tfrac{1}{2\\sigma}e^{-|x|/\\sigma}. \\text{ Find the MoM estimator } \\hat\\sigma.", answer: "\\hat\\sigma = \\sqrt{\\dfrac{\\sum X_i^2}{2n}}", steps: [
+      { tex: "Try $k=1$ first: $E(X) = \\displaystyle\\int_{-\\infty}^{\\infty} x\\cdot\\tfrac{1}{2\\sigma}e^{-|x|/\\sigma}\\,dx$.", why: "General rule: always try $k=1$ first, since it's the simplest moment — but be ready to abandon it if it fails rule 2." },
+      { tex: "The integrand $x\\cdot e^{-|x|/\\sigma}$ is an ODD function (flipping the sign of $x$ flips the sign of the whole integrand), integrated over a symmetric interval $(-\\infty,\\infty)$.", why: "General rule: odd function integrated over a symmetric interval always gives exactly 0 — recognize this shape instantly rather than grinding through the integral." },
+      { tex: "So $E(X)=0$ — this does NOT contain $\\sigma$, violating the second rule (the moment must contain the unknown parameter). We must move to $k=2$.", why: "This is exactly the situation the second rule warns about — a real example where $k=1$ genuinely fails." },
+      { tex: "Compute $\\mu_2=E(X^2) = \\displaystyle\\int_{-\\infty}^{\\infty} x^2\\cdot\\tfrac{1}{2\\sigma}e^{-|x|/\\sigma}\\,dx$. Since $x^2$ is even, this equals $2\\displaystyle\\int_0^\\infty x^2\\cdot\\tfrac{1}{2\\sigma}e^{-x/\\sigma}\\,dx = \\tfrac{1}{\\sigma}\\displaystyle\\int_0^\\infty x^2 e^{-x/\\sigma}\\,dx$.", why: "General rule: for an even integrand on a symmetric interval, double the integral from 0 to infinity instead — this also gets rid of the absolute value, since $x=|x|$ for $x\\geq0$." },
+      { tex: "Substitute $y=x/\\sigma$ (so $x=\\sigma y$, $dx=\\sigma\\,dy$): $\\tfrac{1}{\\sigma}\\displaystyle\\int_0^\\infty (\\sigma y)^2 e^{-y}\\sigma\\,dy = \\sigma^2\\displaystyle\\int_0^\\infty y^2 e^{-y}\\,dy$.", why: "General rule: this substitution always clears $\\sigma$ out of the exponent in exponential-type densities, leaving a standard reference integral." },
+      { tex: "$\\displaystyle\\int_0^\\infty y^2 e^{-y}\\,dy = \\Gamma(3) = 2! = 2$.", why: "General rule: memorize $\\int_0^\\infty y^k e^{-y}dy=k!$ for integer $k$ — here $k=2$." },
+      { tex: "So $\\mu_2 = 2\\sigma^2$. Set $2\\sigma^2 = m_2 = \\tfrac1n\\sum X_i^2$, and solve: $\\sigma^2 = \\tfrac{\\sum X_i^2}{2n}$, so $\\hat\\sigma = \\sqrt{\\dfrac{\\sum X_i^2}{2n}}$.", why: "" },
     ]},
-    { id: "we6-ex3", tex: "\text{Uniform } f(x|\theta)=\tfrac1\theta \text{ on } [0,\theta]. \text{ Find the MoM estimator } \hat\theta.", answer: "\hat\theta = 2\bar X", steps: [
-      { tex: "Compute the theoretical first moment: $E(X) = \displaystyle\int_0^\theta x\cdot\frac1\theta\,dx = \frac1\theta\int_0^\theta x\,dx$.", why: "General rule: $k=1$ is always worth trying first — it's the simplest moment to compute." },
-      { tex: "Antiderivative of $x$ is $\tfrac{x^2}{2}$, evaluated from 0 to $\theta$: $\dfrac1\theta\left[\dfrac{x^2}{2}\right]_0^\theta = \dfrac1\theta\cdot\dfrac{\theta^2}{2} = \dfrac{\theta}{2}$.", why: "Nothing to substitute here — direct power rule integration." },
-      { tex: "So $\mu_1 = E(X) = \dfrac{\theta}{2}$ — this contains $\theta$, so $k=1$ works.", why: "" },
-      { tex: "Set $\mu_1 = m_1$: $\dfrac{\theta}{2} = \bar X$.", why: "General rule: $m_1$ is always just the plain sample mean $\bar X$." },
-      { tex: "Solve for $\theta$: multiply both sides by 2 — $\hat\theta = 2\bar X$.", why: "" },
+    { id: "we6-ex3", tex: "\\text{Uniform } f(x|\\theta)=\\tfrac1\\theta \\text{ on } [0,\\theta]. \\text{ Find the MoM estimator } \\hat\\theta.", answer: "\\hat\\theta = 2\\bar X", steps: [
+      { tex: "Compute the theoretical first moment: $E(X) = \\displaystyle\\int_0^\\theta x\\cdot\\frac1\\theta\\,dx = \\frac1\\theta\\int_0^\\theta x\\,dx$.", why: "General rule: $k=1$ is always worth trying first — it's the simplest moment to compute." },
+      { tex: "Antiderivative of $x$ is $\\tfrac{x^2}{2}$, evaluated from 0 to $\\theta$: $\\dfrac1\\theta\\left[\\dfrac{x^2}{2}\\right]_0^\\theta = \\dfrac1\\theta\\cdot\\dfrac{\\theta^2}{2} = \\dfrac{\\theta}{2}$.", why: "Nothing to substitute here — direct power rule integration." },
+      { tex: "So $\\mu_1 = E(X) = \\dfrac{\\theta}{2}$ — this contains $\\theta$, so $k=1$ works.", why: "" },
+      { tex: "Set $\\mu_1 = m_1$: $\\dfrac{\\theta}{2} = \\bar X$.", why: "General rule: $m_1$ is always just the plain sample mean $\\bar X$." },
+      { tex: "Solve for $\\theta$: multiply both sides by 2 — $\\hat\\theta = 2\\bar X$.", why: "" },
     ]},
-    { id: "we6-ex4", tex: "\text{Normal: } f(x|\mu,\sigma^2)=\tfrac{1}{\sqrt{2\pi}\sigma}\exp\left[-\tfrac{(x-\mu)^2}{2\sigma^2}\right]. \text{ Find MoM estimators } \hat\mu,\hat\sigma^2.", answer: "\hat\mu=\bar X, \quad \hat\sigma^2 = \tfrac1n\sum(X_i-\bar X)^2", steps: [
-      { tex: "Two unknown parameters ($\mu$ and $\sigma^2$), so we need TWO equations: use $k=1$ and $k=2$.", why: "General rule: with $p$ unknown parameters, use the first $p$ moments — one equation per parameter." },
-      { tex: "First theoretical moment: $\mu_1 = E(X) = \mu$ (this is just the definition of the Normal distribution's mean parameter).", why: "" },
-      { tex: "Second theoretical moment: use the identity $\text{Var}(X)=E(X^2)-[E(X)]^2$, rearranged as $E(X^2)=\text{Var}(X)+[E(X)]^2$. Since $\text{Var}(X)=\sigma^2$ and $E(X)=\mu$: $\mu_2 = \sigma^2+\mu^2$.", why: "General rule: for any distribution, once you know the variance formula, $E(X^2)$ follows immediately from this identity — often faster than integrating $x^2 f(x)$ directly." },
-      { tex: "Sample moments: $m_1=\bar X$, $m_2=\tfrac1n\sum X_i^2$.", why: "" },
-      { tex: "Equation 1: $\mu=\bar X \implies \hat\mu=\bar X$.", why: "" },
-      { tex: "Equation 2: $\sigma^2+\mu^2 = \tfrac1n\sum X_i^2$. Substitute $\mu=\bar X$ (already solved): $\sigma^2 = \tfrac1n\sum X_i^2 - \bar X^2$.", why: "General rule: solve equations in order — plug the already-found $\hat\mu$ into the second equation rather than solving both simultaneously from scratch." },
-      { tex: "This simplifies to the familiar sample variance formula: $\hat\sigma^2 = \tfrac1n\sum X_i^2-\bar X^2 = \tfrac1n\sum(X_i-\bar X)^2$ (a standard algebraic identity).", why: "General rule: $\tfrac1n\sum X_i^2-\bar X^2$ and $\tfrac1n\sum(X_i-\bar X)^2$ are ALWAYS equal — worth memorizing both forms, since problems present either one." },
+    { id: "we6-ex4", tex: "\\text{Normal: } f(x|\\mu,\\sigma^2)=\\tfrac{1}{\\sqrt{2\\pi}\\sigma}\\exp\\left[-\\tfrac{(x-\\mu)^2}{2\\sigma^2}\\right]. \\text{ Find MoM estimators } \\hat\\mu,\\hat\\sigma^2.", answer: "\\hat\\mu=\\bar X, \\quad \\hat\\sigma^2 = \\tfrac1n\\sum(X_i-\\bar X)^2", steps: [
+      { tex: "Two unknown parameters ($\\mu$ and $\\sigma^2$), so we need TWO equations: use $k=1$ and $k=2$.", why: "General rule: with $p$ unknown parameters, use the first $p$ moments — one equation per parameter." },
+      { tex: "First theoretical moment: $\\mu_1 = E(X) = \\mu$ (this is just the definition of the Normal distribution's mean parameter).", why: "" },
+      { tex: "Second theoretical moment: use the identity $\\text{Var}(X)=E(X^2)-[E(X)]^2$, rearranged as $E(X^2)=\\text{Var}(X)+[E(X)]^2$. Since $\\text{Var}(X)=\\sigma^2$ and $E(X)=\\mu$: $\\mu_2 = \\sigma^2+\\mu^2$.", why: "General rule: for any distribution, once you know the variance formula, $E(X^2)$ follows immediately from this identity — often faster than integrating $x^2 f(x)$ directly." },
+      { tex: "Sample moments: $m_1=\\bar X$, $m_2=\\tfrac1n\\sum X_i^2$.", why: "" },
+      { tex: "Equation 1: $\\mu=\\bar X \\implies \\hat\\mu=\\bar X$.", why: "" },
+      { tex: "Equation 2: $\\sigma^2+\\mu^2 = \\tfrac1n\\sum X_i^2$. Substitute $\\mu=\\bar X$ (already solved): $\\sigma^2 = \\tfrac1n\\sum X_i^2 - \\bar X^2$.", why: "General rule: solve equations in order — plug the already-found $\\hat\\mu$ into the second equation rather than solving both simultaneously from scratch." },
+      { tex: "This simplifies to the familiar sample variance formula: $\\hat\\sigma^2 = \\tfrac1n\\sum X_i^2-\\bar X^2 = \\tfrac1n\\sum(X_i-\\bar X)^2$ (a standard algebraic identity).", why: "General rule: $\\tfrac1n\\sum X_i^2-\\bar X^2$ and $\\tfrac1n\\sum(X_i-\\bar X)^2$ are ALWAYS equal — worth memorizing both forms, since problems present either one." },
     ]},
   ],
   7: [
-    { id: "we7-ex1", tex: "\text{Same discrete setup as the MoM example. Find the MLE } \hat\theta.", answer: "\hat\theta = 0.5", steps: [
+    { id: "we7-ex1", tex: "\\text{Same discrete setup as the MoM example. Find the MLE } \\hat\\theta.", answer: "\\hat\\theta = 0.5", steps: [
       { tex: "Write the likelihood as a product matching the observed data $(3,0,2,1,3,2,1,0,2,1)$: count how many times each value appears — $0$ appears twice, $1$ appears three times, $2$ appears three times, $3$ appears twice.", why: "General rule: for repeated discrete data, group by value and count frequencies rather than writing out all 10 factors separately — it's the same product, just organized." },
-      { tex: "$L(\theta) = P(0)^2 P(1)^3 P(2)^3 P(3)^2 = \left(\tfrac{2\theta}{3}\right)^2\left(\tfrac{\theta}{3}\right)^3\left(\tfrac{2(1-\theta)}{3}\right)^3\left(\tfrac{1-\theta}{3}\right)^2$.", why: "" },
-      { tex: "Take the log: $l(\theta) = 2\log\tfrac{2\theta}{3}+3\log\tfrac{\theta}{3}+3\log\tfrac{2(1-\theta)}{3}+2\log\tfrac{1-\theta}{3}$.", why: "" },
-      { tex: "Expand each term using $\log(ab)=\log a+\log b$, separating out every piece that involves $\theta$ from every piece that's just a constant: collecting all the $\theta$-terms gives $2\log\theta+3\log\theta=5\log\theta$ from the first two pieces, and $3\log(1-\theta)+2\log(1-\theta)=5\log(1-\theta)$ from the last two.", why: "General rule: constants like $\log\tfrac23$ and $\log\tfrac13$ don't depend on $\theta$, so they'll vanish when we differentiate — no need to track their exact values." },
-      { tex: "So $l(\theta) = C + 5\log\theta + 5\log(1-\theta)$, where $C$ bundles all the constant terms.", why: "" },
-      { tex: "Differentiate: $\dfrac{dl}{d\theta} = \dfrac{5}{\theta} - \dfrac{5}{1-\theta}$.", why: "$\dfrac{d}{d\theta}\log(1-\theta) = \dfrac{-1}{1-\theta}$ by the chain rule — the derivative of the INSIDE ($1-\theta$) is $-1$." },
-      { tex: "Set to 0: $\dfrac{5}{\theta}=\dfrac{5}{1-\theta} \implies \theta = 1-\theta \implies 2\theta=1 \implies \theta=0.5$.", why: "" },
-      { tex: "$\hat\theta_{MLE}=0.5$ — compare directly to the MoM answer of $5/12\approx0.417$ for this exact same data. Different methods, different (both valid) answers.", why: "" },
+      { tex: "$L(\\theta) = P(0)^2 P(1)^3 P(2)^3 P(3)^2 = \\left(\\tfrac{2\\theta}{3}\\right)^2\\left(\\tfrac{\\theta}{3}\\right)^3\\left(\\tfrac{2(1-\\theta)}{3}\\right)^3\\left(\\tfrac{1-\\theta}{3}\\right)^2$.", why: "" },
+      { tex: "Take the log: $l(\\theta) = 2\\log\\tfrac{2\\theta}{3}+3\\log\\tfrac{\\theta}{3}+3\\log\\tfrac{2(1-\\theta)}{3}+2\\log\\tfrac{1-\\theta}{3}$.", why: "" },
+      { tex: "Expand each term using $\\log(ab)=\\log a+\\log b$, separating out every piece that involves $\\theta$ from every piece that's just a constant: collecting all the $\\theta$-terms gives $2\\log\\theta+3\\log\\theta=5\\log\\theta$ from the first two pieces, and $3\\log(1-\\theta)+2\\log(1-\\theta)=5\\log(1-\\theta)$ from the last two.", why: "General rule: constants like $\\log\\tfrac23$ and $\\log\\tfrac13$ don't depend on $\\theta$, so they'll vanish when we differentiate — no need to track their exact values." },
+      { tex: "So $l(\\theta) = C + 5\\log\\theta + 5\\log(1-\\theta)$, where $C$ bundles all the constant terms.", why: "" },
+      { tex: "Differentiate: $\\dfrac{dl}{d\\theta} = \\dfrac{5}{\\theta} - \\dfrac{5}{1-\\theta}$.", why: "$\\dfrac{d}{d\\theta}\\log(1-\\theta) = \\dfrac{-1}{1-\\theta}$ by the chain rule — the derivative of the INSIDE ($1-\\theta$) is $-1$." },
+      { tex: "Set to 0: $\\dfrac{5}{\\theta}=\\dfrac{5}{1-\\theta} \\implies \\theta = 1-\\theta \\implies 2\\theta=1 \\implies \\theta=0.5$.", why: "" },
+      { tex: "$\\hat\\theta_{MLE}=0.5$ — compare directly to the MoM answer of $5/12\\approx0.417$ for this exact same data. Different methods, different (both valid) answers.", why: "" },
     ]},
-    { id: "we7-ex2", tex: "\text{Laplace: } f(x|\sigma)=\tfrac{1}{2\sigma}e^{-|x|/\sigma}. \text{ Find the MLE } \hat\sigma.", answer: "\hat\sigma = \dfrac{\sum|X_i|}{n}", steps: [
-      { tex: "Log-likelihood: $l(\sigma) = \displaystyle\sum_{i=1}^n\left[-\log2-\log\sigma-\dfrac{|X_i|}{\sigma}\right]$.", why: "$\log\left(\tfrac{1}{2\sigma}e^{-|x|/\sigma}\right) = -\log(2\sigma)-\dfrac{|x|}{\sigma} = -\log2-\log\sigma-\dfrac{|x|}{\sigma}$." },
-      { tex: "Differentiate with respect to $\sigma$: $\dfrac{dl}{d\sigma} = \displaystyle\sum_{i=1}^n\left[-\dfrac1\sigma + \dfrac{|X_i|}{\sigma^2}\right] = -\dfrac{n}{\sigma}+\dfrac{\sum|X_i|}{\sigma^2}$.", why: "$\dfrac{d}{d\sigma}\left[-\dfrac{|x|}{\sigma}\right] = \dfrac{|x|}{\sigma^2}$ by the power/chain rule (treat $|X_i|$ as a constant with respect to $\sigma$)." },
-      { tex: "Set to 0 and multiply through by $\sigma^2$: $-n\sigma+\sum|X_i|=0 \implies \sigma = \dfrac{\sum|X_i|}{n}$.", why: "" },
-      { tex: "$\hat\sigma_{MLE} = \dfrac{\sum|X_i|}{n}$ — compare to the MoM answer, $\sqrt{\sum X_i^2/(2n)}$. Different formulas for the same parameter — another case where MLE and MoM disagree.", why: "" },
+    { id: "we7-ex2", tex: "\\text{Laplace: } f(x|\\sigma)=\\tfrac{1}{2\\sigma}e^{-|x|/\\sigma}. \\text{ Find the MLE } \\hat\\sigma.", answer: "\\hat\\sigma = \\dfrac{\\sum|X_i|}{n}", steps: [
+      { tex: "Log-likelihood: $l(\\sigma) = \\displaystyle\\sum_{i=1}^n\\left[-\\log2-\\log\\sigma-\\dfrac{|X_i|}{\\sigma}\\right]$.", why: "$\\log\\left(\\tfrac{1}{2\\sigma}e^{-|x|/\\sigma}\\right) = -\\log(2\\sigma)-\\dfrac{|x|}{\\sigma} = -\\log2-\\log\\sigma-\\dfrac{|x|}{\\sigma}$." },
+      { tex: "Differentiate with respect to $\\sigma$: $\\dfrac{dl}{d\\sigma} = \\displaystyle\\sum_{i=1}^n\\left[-\\dfrac1\\sigma + \\dfrac{|X_i|}{\\sigma^2}\\right] = -\\dfrac{n}{\\sigma}+\\dfrac{\\sum|X_i|}{\\sigma^2}$.", why: "$\\dfrac{d}{d\\sigma}\\left[-\\dfrac{|x|}{\\sigma}\\right] = \\dfrac{|x|}{\\sigma^2}$ by the power/chain rule (treat $|X_i|$ as a constant with respect to $\\sigma$)." },
+      { tex: "Set to 0 and multiply through by $\\sigma^2$: $-n\\sigma+\\sum|X_i|=0 \\implies \\sigma = \\dfrac{\\sum|X_i|}{n}$.", why: "" },
+      { tex: "$\\hat\\sigma_{MLE} = \\dfrac{\\sum|X_i|}{n}$ — compare to the MoM answer, $\\sqrt{\\sum X_i^2/(2n)}$. Different formulas for the same parameter — another case where MLE and MoM disagree.", why: "" },
     ]},
-    { id: "we7-ex3", tex: "\text{Normal, both } \mu,\sigma \text{ unknown. Find the MLEs } \hat\mu,\hat\sigma.", answer: "\hat\mu=\bar X, \quad \hat\sigma=\sqrt{\tfrac1n\sum(X_i-\bar X)^2}", steps: [
-      { tex: "Log-likelihood: $l(\mu,\sigma) = \displaystyle\sum_{i=1}^n\left[-\log\sigma-\tfrac12\log(2\pi)-\dfrac{(X_i-\mu)^2}{2\sigma^2}\right] = -n\log\sigma - \tfrac{n}{2}\log(2\pi) - \dfrac{1}{2\sigma^2}\displaystyle\sum_{i=1}^n(X_i-\mu)^2$.", why: "Same log-density expansion as always, then sum term by term, pulling constants ($-\log\sigma$, $-\tfrac12\log2\pi$) out of the sum since they don't depend on $i$." },
-      { tex: "Since there are TWO unknowns, take TWO partial derivatives — one with respect to $\mu$, one with respect to $\sigma$ — and set each to 0.", why: "General rule: with multiple unknown parameters, differentiate with respect to EACH one separately, treating the others as constants each time." },
-      { tex: "$\dfrac{\partial l}{\partial\mu} = \dfrac{1}{\sigma^2}\displaystyle\sum_{i=1}^n(X_i-\mu) = 0$.", why: "The chain rule on $-\dfrac{1}{2\sigma^2}\sum(X_i-\mu)^2$: derivative of $(X_i-\mu)^2$ with respect to $\mu$ is $-2(X_i-\mu)$, and the $-\tfrac12$ and $-2$ cancel to leave $+\tfrac1{\sigma^2}\sum(X_i-\mu)$." },
-      { tex: "Solve: $\displaystyle\sum(X_i-\mu)=0 \implies \sum X_i = n\mu \implies \hat\mu=\bar X$.", why: "" },
-      { tex: "$\dfrac{\partial l}{\partial\sigma} = -\dfrac{n}{\sigma}+\dfrac{1}{\sigma^3}\displaystyle\sum_{i=1}^n(X_i-\mu)^2 = 0$.", why: "Derivative of $-n\log\sigma$ is $-n/\sigma$; derivative of $-\tfrac{1}{2\sigma^2}(\cdots)$ with respect to $\sigma$ uses the power rule on $\sigma^{-2}$, giving $+\sigma^{-3}(\cdots)$." },
-      { tex: "Multiply through by $\sigma^3$: $-n\sigma^2 + \displaystyle\sum(X_i-\mu)^2 = 0 \implies \sigma^2 = \dfrac1n\sum(X_i-\mu)^2$.", why: "" },
-      { tex: "Substitute the already-found $\hat\mu=\bar X$: $\hat\sigma = \sqrt{\dfrac1n\displaystyle\sum(X_i-\bar X)^2}$ — this time MLE matches MoM exactly (up to $\sigma$ vs $\sigma^2$, the same quantity).", why: "General rule: solve the $\mu$-equation first, then substitute into the $\sigma$-equation — solving both simultaneously from scratch is much messier." },
+    { id: "we7-ex3", tex: "\\text{Normal, both } \\mu,\\sigma \\text{ unknown. Find the MLEs } \\hat\\mu,\\hat\\sigma.", answer: "\\hat\\mu=\\bar X, \\quad \\hat\\sigma=\\sqrt{\\tfrac1n\\sum(X_i-\\bar X)^2}", steps: [
+      { tex: "Log-likelihood: $l(\\mu,\\sigma) = \\displaystyle\\sum_{i=1}^n\\left[-\\log\\sigma-\\tfrac12\\log(2\\pi)-\\dfrac{(X_i-\\mu)^2}{2\\sigma^2}\\right] = -n\\log\\sigma - \\tfrac{n}{2}\\log(2\\pi) - \\dfrac{1}{2\\sigma^2}\\displaystyle\\sum_{i=1}^n(X_i-\\mu)^2$.", why: "Same log-density expansion as always, then sum term by term, pulling constants ($-\\log\\sigma$, $-\\tfrac12\\log2\\pi$) out of the sum since they don't depend on $i$." },
+      { tex: "Since there are TWO unknowns, take TWO partial derivatives — one with respect to $\\mu$, one with respect to $\\sigma$ — and set each to 0.", why: "General rule: with multiple unknown parameters, differentiate with respect to EACH one separately, treating the others as constants each time." },
+      { tex: "$\\dfrac{\\partial l}{\\partial\\mu} = \\dfrac{1}{\\sigma^2}\\displaystyle\\sum_{i=1}^n(X_i-\\mu) = 0$.", why: "The chain rule on $-\\dfrac{1}{2\\sigma^2}\\sum(X_i-\\mu)^2$: derivative of $(X_i-\\mu)^2$ with respect to $\\mu$ is $-2(X_i-\\mu)$, and the $-\\tfrac12$ and $-2$ cancel to leave $+\\tfrac1{\\sigma^2}\\sum(X_i-\\mu)$." },
+      { tex: "Solve: $\\displaystyle\\sum(X_i-\\mu)=0 \\implies \\sum X_i = n\\mu \\implies \\hat\\mu=\\bar X$.", why: "" },
+      { tex: "$\\dfrac{\\partial l}{\\partial\\sigma} = -\\dfrac{n}{\\sigma}+\\dfrac{1}{\\sigma^3}\\displaystyle\\sum_{i=1}^n(X_i-\\mu)^2 = 0$.", why: "Derivative of $-n\\log\\sigma$ is $-n/\\sigma$; derivative of $-\\tfrac{1}{2\\sigma^2}(\\cdots)$ with respect to $\\sigma$ uses the power rule on $\\sigma^{-2}$, giving $+\\sigma^{-3}(\\cdots)$." },
+      { tex: "Multiply through by $\\sigma^3$: $-n\\sigma^2 + \\displaystyle\\sum(X_i-\\mu)^2 = 0 \\implies \\sigma^2 = \\dfrac1n\\sum(X_i-\\mu)^2$.", why: "" },
+      { tex: "Substitute the already-found $\\hat\\mu=\\bar X$: $\\hat\\sigma = \\sqrt{\\dfrac1n\\displaystyle\\sum(X_i-\\bar X)^2}$ — this time MLE matches MoM exactly (up to $\\sigma$ vs $\\sigma^2$, the same quantity).", why: "General rule: solve the $\\mu$-equation first, then substitute into the $\\sigma$-equation — solving both simultaneously from scratch is much messier." },
     ]},
-    { id: "we7-ex4", tex: "\text{Pareto: } f(x|x_0,\theta)=\theta x_0^\theta x^{-\theta-1}, x\geq x_0 \text{ (known)}, \theta>1. \text{ Find the MLE } \hat\theta.", answer: "\hat\theta = \dfrac{1}{\left(\tfrac1n\sum\log X_i\right)-\log x_0}", steps: [
-      { tex: "Log-likelihood: $l(\theta) = \displaystyle\sum_{i=1}^n\log\left(\theta x_0^\theta X_i^{-\theta-1}\right) = \displaystyle\sum_{i=1}^n\left[\log\theta+\theta\log x_0-(\theta+1)\log X_i\right]$.", why: "Same $\log(abc)=\log a+\log b+\log c$ expansion as always, applied term by term to the three factors $\theta$, $x_0^\theta$, and $X_i^{-\theta-1}$." },
-      { tex: "Distribute the sum: $l(\theta) = n\log\theta + n\theta\log x_0 - (\theta+1)\displaystyle\sum_{i=1}^n\log X_i$.", why: "$\log\theta$ and $\theta\log x_0$ are each added $n$ times (no $i$-dependence); $(\theta+1)$ factors out of its sum." },
-      { tex: "Differentiate with respect to $\theta$: $\dfrac{dl}{d\theta} = \dfrac{n}{\theta} + n\log x_0 - \displaystyle\sum_{i=1}^n\log X_i$.", why: "$\dfrac{d}{d\theta}[n\log\theta]=n/\theta$; $\dfrac{d}{d\theta}[n\theta\log x_0]=n\log x_0$ (since $\log x_0$ is just a constant, $x_0$ is known); $\dfrac{d}{d\theta}\left[-(\theta+1)\sum\log X_i\right] = -\sum\log X_i$." },
-      { tex: "Set to 0: $\dfrac{n}{\theta} = \displaystyle\sum_{i=1}^n\log X_i - n\log x_0$.", why: "" },
-      { tex: "Solve for $\theta$: $\theta = \dfrac{n}{\displaystyle\sum\log X_i - n\log x_0}$. Divide top and bottom by $n$: $\theta = \dfrac{1}{\left(\tfrac1n\displaystyle\sum\log X_i\right)-\log x_0}$.", why: "General rule: dividing numerator and denominator by $n$ converts a raw sum $\sum\log X_i$ into the more interpretable AVERAGE of the logs, $\tfrac1n\sum\log X_i$ — cleaner to state and to compute from data." },
-      { tex: "$\hat\theta_{MLE} = \dfrac{1}{\left(\tfrac1n\sum\log X_i\right)-\log x_0}$", why: "Worth double-checking: since $X_i\geq x_0$ always, $\log X_i\geq\log x_0$, so the average of the logs is at least $\log x_0$ — keeping the denominator non-negative, as required for a sensible $\theta$." },
+    { id: "we7-ex4", tex: "\\text{Pareto: } f(x|x_0,\\theta)=\\theta x_0^\\theta x^{-\\theta-1}, x\\geq x_0 \\text{ (known)}, \\theta>1. \\text{ Find the MLE } \\hat\\theta.", answer: "\\hat\\theta = \\dfrac{1}{\\left(\\tfrac1n\\sum\\log X_i\\right)-\\log x_0}", steps: [
+      { tex: "Log-likelihood: $l(\\theta) = \\displaystyle\\sum_{i=1}^n\\log\\left(\\theta x_0^\\theta X_i^{-\\theta-1}\\right) = \\displaystyle\\sum_{i=1}^n\\left[\\log\\theta+\\theta\\log x_0-(\\theta+1)\\log X_i\\right]$.", why: "Same $\\log(abc)=\\log a+\\log b+\\log c$ expansion as always, applied term by term to the three factors $\\theta$, $x_0^\\theta$, and $X_i^{-\\theta-1}$." },
+      { tex: "Distribute the sum: $l(\\theta) = n\\log\\theta + n\\theta\\log x_0 - (\\theta+1)\\displaystyle\\sum_{i=1}^n\\log X_i$.", why: "$\\log\\theta$ and $\\theta\\log x_0$ are each added $n$ times (no $i$-dependence); $(\\theta+1)$ factors out of its sum." },
+      { tex: "Differentiate with respect to $\\theta$: $\\dfrac{dl}{d\\theta} = \\dfrac{n}{\\theta} + n\\log x_0 - \\displaystyle\\sum_{i=1}^n\\log X_i$.", why: "$\\dfrac{d}{d\\theta}[n\\log\\theta]=n/\\theta$; $\\dfrac{d}{d\\theta}[n\\theta\\log x_0]=n\\log x_0$ (since $\\log x_0$ is just a constant, $x_0$ is known); $\\dfrac{d}{d\\theta}\\left[-(\\theta+1)\\sum\\log X_i\\right] = -\\sum\\log X_i$." },
+      { tex: "Set to 0: $\\dfrac{n}{\\theta} = \\displaystyle\\sum_{i=1}^n\\log X_i - n\\log x_0$.", why: "" },
+      { tex: "Solve for $\\theta$: $\\theta = \\dfrac{n}{\\displaystyle\\sum\\log X_i - n\\log x_0}$. Divide top and bottom by $n$: $\\theta = \\dfrac{1}{\\left(\\tfrac1n\\displaystyle\\sum\\log X_i\\right)-\\log x_0}$.", why: "General rule: dividing numerator and denominator by $n$ converts a raw sum $\\sum\\log X_i$ into the more interpretable AVERAGE of the logs, $\\tfrac1n\\sum\\log X_i$ — cleaner to state and to compute from data." },
+      { tex: "$\\hat\\theta_{MLE} = \\dfrac{1}{\\left(\\tfrac1n\\sum\\log X_i\\right)-\\log x_0}$", why: "Worth double-checking: since $X_i\\geq x_0$ always, $\\log X_i\\geq\\log x_0$, so the average of the logs is at least $\\log x_0$ — keeping the denominator non-negative, as required for a sensible $\\theta$." },
     ]},
-    { id: "we7-ex5", tex: "\text{Same uniform setup, } f(x|\theta)=\tfrac1\theta \text{ on } [0,\theta]. \text{ Find the MLE } \hat\theta.", answer: "\hat\theta = \max(X_1,\ldots,X_n)", steps: [
-      { tex: "Write the likelihood: $L(\theta) = \displaystyle\prod_{i=1}^n f(x_i|\theta) = \dfrac{1}{\theta^n}$, but ONLY valid when every $x_i$ satisfies $0\leq x_i\leq\theta$; otherwise $L(\theta)=0$.", why: "General rule: always write out the domain restriction explicitly for a uniform-type density." },
-      { tex: "The condition '$x_i\leq\theta$ for every $i$' is the same as saying $\theta \geq \max(x_1,\ldots,x_n)$.", why: "General rule: 'true for every $i$' conditions collapse into a max or min condition." },
-      { tex: "So we need $\theta \geq \max(x_1,\ldots,x_n)$, and among all such $\theta$, we want to maximize $1/\theta^n$.", why: "" },
-      { tex: "$1/\theta^n$ is a DECREASING function of $\theta$ — so to maximize it, we want $\theta$ as SMALL as possible.", why: "General rule: when $dL/d\theta$ never equals zero, reason about monotonicity directly instead of calculus." },
-      { tex: "The smallest $\theta$ allowed is exactly $\theta = \max(x_1,\ldots,x_n)$.", why: "" },
-      { tex: "$\hat\theta_{MLE} = \max(X_1,\ldots,X_n)$ — completely different from the MoM answer ($2\bar X$) for the exact same distribution.", why: "This estimator always underestimates $\theta$ slightly, since $\max(X_i)<\theta$ with probability 1." },
+    { id: "we7-ex5", tex: "\\text{Same uniform setup, } f(x|\\theta)=\\tfrac1\\theta \\text{ on } [0,\\theta]. \\text{ Find the MLE } \\hat\\theta.", answer: "\\hat\\theta = \\max(X_1,\\ldots,X_n)", steps: [
+      { tex: "Write the likelihood: $L(\\theta) = \\displaystyle\\prod_{i=1}^n f(x_i|\\theta) = \\dfrac{1}{\\theta^n}$, but ONLY valid when every $x_i$ satisfies $0\\leq x_i\\leq\\theta$; otherwise $L(\\theta)=0$.", why: "General rule: always write out the domain restriction explicitly for a uniform-type density." },
+      { tex: "The condition '$x_i\\leq\\theta$ for every $i$' is the same as saying $\\theta \\geq \\max(x_1,\\ldots,x_n)$.", why: "General rule: 'true for every $i$' conditions collapse into a max or min condition." },
+      { tex: "So we need $\\theta \\geq \\max(x_1,\\ldots,x_n)$, and among all such $\\theta$, we want to maximize $1/\\theta^n$.", why: "" },
+      { tex: "$1/\\theta^n$ is a DECREASING function of $\\theta$ — so to maximize it, we want $\\theta$ as SMALL as possible.", why: "General rule: when $dL/d\\theta$ never equals zero, reason about monotonicity directly instead of calculus." },
+      { tex: "The smallest $\\theta$ allowed is exactly $\\theta = \\max(x_1,\\ldots,x_n)$.", why: "" },
+      { tex: "$\\hat\\theta_{MLE} = \\max(X_1,\\ldots,X_n)$ — completely different from the MoM answer ($2\\bar X$) for the exact same distribution.", why: "This estimator always underestimates $\\theta$ slightly, since $\\max(X_i)<\\theta$ with probability 1." },
     ]},
-    { id: "we7-ex6", tex: "f(x|\theta)=e^{\theta-x} \text{ for } x>\theta \text{ (strict inequality). Show the MLE does not exist.}", answer: "\text{MLE does not exist}", steps: [
-      { tex: "Likelihood: $L(\theta) = \displaystyle\prod_{i=1}^n e^{\theta-x_i} = e^{n\theta-\sum x_i}$, valid only when $\theta<x_i$ for EVERY $i$, i.e. $\theta<\min(x_1,\ldots,x_n)$.", why: "Same domain-restriction bookkeeping as every uniform-type problem — the strict inequality here matters a lot." },
-      { tex: "$L(\theta)=e^{n\theta-\sum x_i}$ is an INCREASING function of $\theta$ (bigger $\theta$ makes the exponent bigger).", why: "General rule: when $\theta$ appears with a positive coefficient in the exponent, $L(\theta)$ increases with $\theta$ — the opposite situation from the uniform-max example." },
-      { tex: "So we want $\theta$ as LARGE as possible, subject to $\theta<\min(x_1,\ldots,x_n)$ — but $\theta$ can get arbitrarily CLOSE to $\min(x_i)$ without ever reaching it (strict inequality).", why: "" },
-      { tex: "There is no largest number strictly less than $\min(x_i)$ — for any candidate $\theta$, you could always pick a larger one still less than $\min(x_i)$. The supremum is $\min(x_i)$, but it's never attained.", why: "General rule: whenever a maximization problem's boundary is EXCLUDED (strict inequality) rather than included, check carefully whether a true maximum exists at all." },
-      { tex: "Therefore, no value of $\theta$ actually maximizes $L(\theta)$ — the MLE does not exist for this version of the density.", why: "" },
+    { id: "we7-ex6", tex: "f(x|\\theta)=e^{\\theta-x} \\text{ for } x>\\theta \\text{ (strict inequality). Show the MLE does not exist.}", answer: "\\text{MLE does not exist}", steps: [
+      { tex: "Likelihood: $L(\\theta) = \\displaystyle\\prod_{i=1}^n e^{\\theta-x_i} = e^{n\\theta-\\sum x_i}$, valid only when $\\theta<x_i$ for EVERY $i$, i.e. $\\theta<\\min(x_1,\\ldots,x_n)$.", why: "Same domain-restriction bookkeeping as every uniform-type problem — the strict inequality here matters a lot." },
+      { tex: "$L(\\theta)=e^{n\\theta-\\sum x_i}$ is an INCREASING function of $\\theta$ (bigger $\\theta$ makes the exponent bigger).", why: "General rule: when $\\theta$ appears with a positive coefficient in the exponent, $L(\\theta)$ increases with $\\theta$ — the opposite situation from the uniform-max example." },
+      { tex: "So we want $\\theta$ as LARGE as possible, subject to $\\theta<\\min(x_1,\\ldots,x_n)$ — but $\\theta$ can get arbitrarily CLOSE to $\\min(x_i)$ without ever reaching it (strict inequality).", why: "" },
+      { tex: "There is no largest number strictly less than $\\min(x_i)$ — for any candidate $\\theta$, you could always pick a larger one still less than $\\min(x_i)$. The supremum is $\\min(x_i)$, but it's never attained.", why: "General rule: whenever a maximization problem's boundary is EXCLUDED (strict inequality) rather than included, check carefully whether a true maximum exists at all." },
+      { tex: "Therefore, no value of $\\theta$ actually maximizes $L(\\theta)$ — the MLE does not exist for this version of the density.", why: "" },
     ]},
-    { id: "we7-ex6b", tex: "\text{Fix the previous example by using } f(x|\theta)=e^{\theta-x} \text{ for } x\geq\theta \text{ (non-strict). Find the MLE.}", answer: "\hat\theta = \min(X_1,\ldots,X_n)", steps: [
-      { tex: "Now the condition becomes $\theta\leq x_i$ for every $i$, i.e. $\theta\leq\min(x_1,\ldots,x_n)$ — and this value IS attainable now.", why: "General rule: switching a strict inequality to non-strict in the density can fix an otherwise-nonexistent MLE — the two versions describe the exact same distribution, just written differently." },
-      { tex: "Since $L(\theta)$ is still increasing in $\theta$, the largest ALLOWED value is $\theta=\min(x_1,\ldots,x_n)$, and this time it's actually achievable.", why: "" },
-      { tex: "$\hat\theta_{MLE} = \min(X_1,\ldots,X_n)$", why: "" },
+    { id: "we7-ex6b", tex: "\\text{Fix the previous example by using } f(x|\\theta)=e^{\\theta-x} \\text{ for } x\\geq\\theta \\text{ (non-strict). Find the MLE.}", answer: "\\hat\\theta = \\min(X_1,\\ldots,X_n)", steps: [
+      { tex: "Now the condition becomes $\\theta\\leq x_i$ for every $i$, i.e. $\\theta\\leq\\min(x_1,\\ldots,x_n)$ — and this value IS attainable now.", why: "General rule: switching a strict inequality to non-strict in the density can fix an otherwise-nonexistent MLE — the two versions describe the exact same distribution, just written differently." },
+      { tex: "Since $L(\\theta)$ is still increasing in $\\theta$, the largest ALLOWED value is $\\theta=\\min(x_1,\\ldots,x_n)$, and this time it's actually achievable.", why: "" },
+      { tex: "$\\hat\\theta_{MLE} = \\min(X_1,\\ldots,X_n)$", why: "" },
     ]},
-    { id: "we7-ex7", tex: "\text{Uniform}(\theta,\theta+1), -\infty<\theta<\infty. \text{ Show the MLE is not unique.}", answer: "\text{Any } \theta \text{ in } [\max(X_i)-1,\ \min(X_i)] \text{ is an MLE}", steps: [
-      { tex: "The density is $f(x|\theta)=1$ for $\theta\leq x\leq\theta+1$ (and 0 otherwise) — so $L(\theta)=1$ whenever EVERY $x_i$ falls in $[\theta,\theta+1]$, and $L(\theta)=0$ otherwise.", why: "General rule: for a uniform density, the likelihood is a constant (here, exactly 1) wherever it's valid, and 0 elsewhere — there's no 'peak' to find via calculus, only a region where $L$ is nonzero." },
-      { tex: "The condition '$\theta\leq x_i$ for all $i$' means $\theta\leq\min(x_1,\ldots,x_n)$. The condition '$x_i\leq\theta+1$ for all $i$' means $\theta\geq\max(x_1,\ldots,x_n)-1$.", why: "General rule: split a two-sided constraint ($\theta\leq x_i\leq\theta+1$) into its two separate one-sided conditions, then convert each to a min/max statement." },
-      { tex: "So $L(\theta)=1$ for EVERY $\theta$ in the interval $[\max(x_i)-1,\ \min(x_i)]$, and $L(\theta)=0$ outside it.", why: "" },
-      { tex: "Since $L(\theta)$ equals its maximum value (1) at every point in that whole interval, ANY $\theta$ in $[\max(X_i)-1,\min(X_i)]$ qualifies as a maximizer — the MLE is not a single number here.", why: "General rule: uniqueness of the MLE is not guaranteed in general — when the likelihood is flat across a range at its maximum, every point in that range is equally valid." },
+    { id: "we7-ex7", tex: "\\text{Uniform}(\\theta,\\theta+1), -\\infty<\\theta<\\infty. \\text{ Show the MLE is not unique.}", answer: "\\text{Any } \\theta \\text{ in } [\\max(X_i)-1,\\ \\min(X_i)] \\text{ is an MLE}", steps: [
+      { tex: "The density is $f(x|\\theta)=1$ for $\\theta\\leq x\\leq\\theta+1$ (and 0 otherwise) — so $L(\\theta)=1$ whenever EVERY $x_i$ falls in $[\\theta,\\theta+1]$, and $L(\\theta)=0$ otherwise.", why: "General rule: for a uniform density, the likelihood is a constant (here, exactly 1) wherever it's valid, and 0 elsewhere — there's no 'peak' to find via calculus, only a region where $L$ is nonzero." },
+      { tex: "The condition '$\\theta\\leq x_i$ for all $i$' means $\\theta\\leq\\min(x_1,\\ldots,x_n)$. The condition '$x_i\\leq\\theta+1$ for all $i$' means $\\theta\\geq\\max(x_1,\\ldots,x_n)-1$.", why: "General rule: split a two-sided constraint ($\\theta\\leq x_i\\leq\\theta+1$) into its two separate one-sided conditions, then convert each to a min/max statement." },
+      { tex: "So $L(\\theta)=1$ for EVERY $\\theta$ in the interval $[\\max(x_i)-1,\\ \\min(x_i)]$, and $L(\\theta)=0$ outside it.", why: "" },
+      { tex: "Since $L(\\theta)$ equals its maximum value (1) at every point in that whole interval, ANY $\\theta$ in $[\\max(X_i)-1,\\min(X_i)]$ qualifies as a maximizer — the MLE is not a single number here.", why: "General rule: uniqueness of the MLE is not guaranteed in general — when the likelihood is flat across a range at its maximum, every point in that range is equally valid." },
     ]},
   ],
   8: [
-    { id: "we8-ex1", tex: "\text{Bernoulli trials, } P(X_i=1)=\theta. \text{ Verify directly (from the definition) that } T=\sum X_i \text{ is sufficient.}", answer: "\text{Sufficient: } P(X=x|T=t)=1/\binom{n}{t}, \text{ independent of } \theta", steps: [
-      { tex: "By the definition of conditional probability: $P(X_1=x_1,\ldots,X_n=x_n\mid T=t) = \dfrac{P(X_1=x_1,\ldots,X_n=x_n)}{P(T=t)}$.", why: "General rule: proving sufficiency directly from the definition (rather than via the Factorization Theorem) always starts by writing out this conditional probability formula." },
-      { tex: "Numerator: since each $X_i$ is 0 or 1 with $P(X_i=1)=\theta$, and they're independent, the probability of any SPECIFIC arrangement with exactly $t$ ones and $n-t$ zeros is $\theta^t(1-\theta)^{n-t}$.", why: "Independence lets you multiply the individual Bernoulli probabilities together directly." },
-      { tex: "Denominator: $T=\sum X_i$ counts the total number of 1's, which is Binomial$(n,\theta)$ by definition, so $P(T=t) = \binom{n}{t}\theta^t(1-\theta)^{n-t}$.", why: "General rule: a sum of $n$ independent Bernoulli$(\theta)$ trials is ALWAYS Binomial$(n,\theta)$ — a fact worth having memorized cold." },
-      { tex: "Divide: $\dfrac{\theta^t(1-\theta)^{n-t}}{\binom{n}{t}\theta^t(1-\theta)^{n-t}} = \dfrac{1}{\binom{n}{t}}$.", why: "The $\theta^t(1-\theta)^{n-t}$ factors cancel completely, top and bottom." },
-      { tex: "The result, $1/\binom{n}{t}$, has NO $\theta$ in it at all — confirming, straight from the definition, that $T=\sum X_i$ is sufficient for $\theta$.", why: "This matches what the Factorization Theorem would tell you instantly, but doing it from the raw definition once is worth seeing — it's what the theorem is built on top of." },
+    { id: "we8-ex1", tex: "\\text{Bernoulli trials, } P(X_i=1)=\\theta. \\text{ Verify directly (from the definition) that } T=\\sum X_i \\text{ is sufficient.}", answer: "\\text{Sufficient: } P(X=x|T=t)=1/\\binom{n}{t}, \\text{ independent of } \\theta", steps: [
+      { tex: "By the definition of conditional probability: $P(X_1=x_1,\\ldots,X_n=x_n\\mid T=t) = \\dfrac{P(X_1=x_1,\\ldots,X_n=x_n)}{P(T=t)}$.", why: "General rule: proving sufficiency directly from the definition (rather than via the Factorization Theorem) always starts by writing out this conditional probability formula." },
+      { tex: "Numerator: since each $X_i$ is 0 or 1 with $P(X_i=1)=\\theta$, and they're independent, the probability of any SPECIFIC arrangement with exactly $t$ ones and $n-t$ zeros is $\\theta^t(1-\\theta)^{n-t}$.", why: "Independence lets you multiply the individual Bernoulli probabilities together directly." },
+      { tex: "Denominator: $T=\\sum X_i$ counts the total number of 1's, which is Binomial $(n,\\theta)$ by definition, so $P(T=t) = \\binom{n}{t}\\theta^t(1-\\theta)^{n-t}$.", why: "General rule: a sum of $n$ independent Bernoulli $(\\theta)$ trials is ALWAYS Binomial $(n,\\theta)$ — a fact worth having memorized cold." },
+      { tex: "Divide: $\\dfrac{\\theta^t(1-\\theta)^{n-t}}{\\binom{n}{t}\\theta^t(1-\\theta)^{n-t}} = \\dfrac{1}{\\binom{n}{t}}$.", why: "The $\\theta^t(1-\\theta)^{n-t}$ factors cancel completely, top and bottom." },
+      { tex: "The result, $1/\\binom{n}{t}$, has NO $\\theta$ in it at all — confirming, straight from the definition, that $T=\\sum X_i$ is sufficient for $\\theta$.", why: "This matches what the Factorization Theorem would tell you instantly, but doing it from the raw definition once is worth seeing — it's what the theorem is built on top of." },
     ]},
-    { id: "we8-ex2", tex: "\text{Let } X_1,\ldots,X_n \text{ be i.i.d. Poisson}(\theta). \text{ Show } T=\sum X_i \text{ is sufficient for } \theta.", answer: "\text{Sufficient by factorization: } u(x)=\prod\tfrac{1}{x_i!},\ v(T,\theta)=e^{-n\theta}\theta^T", steps: [
-      { tex: "Write the joint PMF: $f_n(x|\theta) = \displaystyle\prod_{i=1}^n \dfrac{e^{-\theta}\theta^{x_i}}{x_i!}$.", why: "General rule: for an i.i.d. sample, the joint PMF is ALWAYS the product of the individual ones." },
-      { tex: "Separate: $= \left(\displaystyle\prod_{i=1}^n \dfrac{1}{x_i!}\right) \cdot e^{-n\theta} \cdot \theta^{\sum_{i=1}^n x_i}$.", why: "General rule: $e^{-\theta}$ repeated $n$ times becomes $e^{-n\theta}$; $\theta^{x_1}\theta^{x_2}\cdots = \theta^{\sum x_i}$." },
-      { tex: "Identify $u(x) = \displaystyle\prod_{i=1}^n \dfrac{1}{x_i!}$ — no $\theta$ in it.", why: "" },
-      { tex: "Identify $v(T,\theta) = e^{-n\theta}\theta^{T}$ where $T=\sum x_i$ — depends on data ONLY through $T$.", why: "" },
-      { tex: "Since $f_n(x|\theta) = u(x)\cdot v[T(x),\theta]$, $T=\sum X_i$ is sufficient for $\theta$.", why: "" },
+    { id: "we8-ex2", tex: "\\text{Let } X_1,\\ldots,X_n \\text{ be i.i.d. Poisson}(\\theta). \\text{ Show } T=\\sum X_i \\text{ is sufficient for } \\theta.", answer: "\\text{Sufficient by factorization: } u(x)=\\prod\\tfrac{1}{x_i!},\\ v(T,\\theta)=e^{-n\\theta}\\theta^T", steps: [
+      { tex: "Write the joint PMF: $f_n(x|\\theta) = \\displaystyle\\prod_{i=1}^n \\dfrac{e^{-\\theta}\\theta^{x_i}}{x_i!}$.", why: "General rule: for an i.i.d. sample, the joint PMF is ALWAYS the product of the individual ones." },
+      { tex: "Separate: $= \\left(\\displaystyle\\prod_{i=1}^n \\dfrac{1}{x_i!}\\right) \\cdot e^{-n\\theta} \\cdot \\theta^{\\sum_{i=1}^n x_i}$.", why: "General rule: $e^{-\\theta}$ repeated $n$ times becomes $e^{-n\\theta}$; $\\theta^{x_1}\\theta^{x_2}\\cdots = \\theta^{\\sum x_i}$." },
+      { tex: "Identify $u(x) = \\displaystyle\\prod_{i=1}^n \\dfrac{1}{x_i!}$ — no $\\theta$ in it.", why: "" },
+      { tex: "Identify $v(T,\\theta) = e^{-n\\theta}\\theta^{T}$ where $T=\\sum x_i$ — depends on data ONLY through $T$.", why: "" },
+      { tex: "Since $f_n(x|\\theta) = u(x)\\cdot v[T(x),\\theta]$, $T=\\sum X_i$ is sufficient for $\\theta$.", why: "" },
     ]},
-    { id: "we8-ex3", tex: "f(x|\theta)=\theta x^{\theta-1} \text{ for } 0<x<1. \text{ Show } T=\prod X_i \text{ is sufficient for } \theta.", answer: "\text{Sufficient: } u(x)=1,\ v(T,\theta)=\theta^n T^{\theta-1}", steps: [
-      { tex: "Joint density: $f_n(x|\theta) = \displaystyle\prod_{i=1}^n \theta x_i^{\theta-1} = \theta^n \left(\displaystyle\prod_{i=1}^n x_i\right)^{\theta-1}$, valid for $0<x_i<1$ (all $i$).", why: "General rule: $\theta$ repeated $n$ times becomes $\theta^n$; the individual $x_i^{\theta-1}$ factors combine because they share the SAME exponent $\theta-1$." },
-      { tex: "This already depends on the data only through $T=\prod x_i$ — set $u(x)=1$ (or, being careful about the domain, $u(x)=1$ for all $x_i\in(0,1)$ and $0$ otherwise) and $v(T,\theta)=\theta^n T^{\theta-1}$.", why: "General rule: sometimes the factorization is almost immediate once the joint density is simplified — don't overthink it if $u(x)$ turns out to just be 1." },
-      { tex: "By the Factorization Theorem, $T=\prod X_i$ is sufficient for $\theta$.", why: "" },
+    { id: "we8-ex3", tex: "f(x|\\theta)=\\theta x^{\\theta-1} \\text{ for } 0<x<1. \\text{ Show } T=\\prod X_i \\text{ is sufficient for } \\theta.", answer: "\\text{Sufficient: } u(x)=1,\\ v(T,\\theta)=\\theta^n T^{\\theta-1}", steps: [
+      { tex: "Joint density: $f_n(x|\\theta) = \\displaystyle\\prod_{i=1}^n \\theta x_i^{\\theta-1} = \\theta^n \\left(\\displaystyle\\prod_{i=1}^n x_i\\right)^{\\theta-1}$, valid for $0<x_i<1$ (all $i$).", why: "General rule: $\\theta$ repeated $n$ times becomes $\\theta^n$; the individual $x_i^{\\theta-1}$ factors combine because they share the SAME exponent $\\theta-1$." },
+      { tex: "This already depends on the data only through $T=\\prod x_i$ — set $u(x)=1$ (or, being careful about the domain, $u(x)=1$ for all $x_i\\in(0,1)$ and $0$ otherwise) and $v(T,\\theta)=\\theta^n T^{\\theta-1}$.", why: "General rule: sometimes the factorization is almost immediate once the joint density is simplified — don't overthink it if $u(x)$ turns out to just be 1." },
+      { tex: "By the Factorization Theorem, $T=\\prod X_i$ is sufficient for $\\theta$.", why: "" },
     ]},
-    { id: "we8-ex4", tex: "\text{Normal, mean } \mu \text{ unknown, variance } \sigma^2 \text{ known. Find a sufficient statistic for } \mu.", answer: "T=\sum X_i \text{ (equivalently } \bar X\text{)}", steps: [
-      { tex: "Joint density: $f_n(x|\mu) = \displaystyle\prod_{i=1}^n \dfrac{1}{\sqrt{2\pi}\sigma}\exp\left[-\dfrac{(x_i-\mu)^2}{2\sigma^2}\right] = \dfrac{1}{(2\pi)^{n/2}\sigma^n}\exp\left[-\dfrac{1}{2\sigma^2}\displaystyle\sum_{i=1}^n(x_i-\mu)^2\right]$.", why: "Same combining move as always: constants multiply into a single power, exponentials combine by adding exponents." },
-      { tex: "Expand the square inside the sum: $(x_i-\mu)^2 = x_i^2-2\mu x_i+\mu^2$, so $\displaystyle\sum(x_i-\mu)^2 = \sum x_i^2 - 2\mu\sum x_i + n\mu^2$.", why: "General rule: whenever $\mu$ (the unknown) is trapped inside a squared term summed over the data, expand the square FIRST — this is what lets you separate the $\mu$-dependent pieces from the $\mu$-free pieces." },
-      { tex: "Substitute back: $f_n(x|\mu) = \dfrac{1}{(2\pi)^{n/2}\sigma^n}\exp\left[-\dfrac{\sum x_i^2}{2\sigma^2}\right]\cdot\exp\left[\dfrac{\mu\sum x_i}{\sigma^2}-\dfrac{n\mu^2}{2\sigma^2}\right]$.", why: "Split the single exponential into two separate exponential factors — one holding the $\mu$-free piece ($\sum x_i^2$), one holding everything that depends on $\mu$." },
-      { tex: "Group $u(x) = \dfrac{1}{(2\pi)^{n/2}\sigma^n}\exp\left[-\dfrac{\sum x_i^2}{2\sigma^2}\right]$ (no $\mu$ — $\sigma^2$ is known, so it's just a constant here), and $v(T,\mu)=\exp\left[\dfrac{\mu T}{\sigma^2}-\dfrac{n\mu^2}{2\sigma^2}\right]$ where $T=\sum x_i$.", why: "" },
-      { tex: "By the Factorization Theorem, $T=\sum X_i$ is sufficient for $\mu$. Since $\bar X = T/n$ is a one-to-one function of $T$, $\bar X$ is also sufficient.", why: "" },
+    { id: "we8-ex4", tex: "\\text{Normal, mean } \\mu \\text{ unknown, variance } \\sigma^2 \\text{ known. Find a sufficient statistic for } \\mu.", answer: "T=\\sum X_i \\text{ (equivalently } \\bar X\\text{)}", steps: [
+      { tex: "Joint density: $f_n(x|\\mu) = \\displaystyle\\prod_{i=1}^n \\dfrac{1}{\\sqrt{2\\pi}\\sigma}\\exp\\left[-\\dfrac{(x_i-\\mu)^2}{2\\sigma^2}\\right] = \\dfrac{1}{(2\\pi)^{n/2}\\sigma^n}\\exp\\left[-\\dfrac{1}{2\\sigma^2}\\displaystyle\\sum_{i=1}^n(x_i-\\mu)^2\\right]$.", why: "Same combining move as always: constants multiply into a single power, exponentials combine by adding exponents." },
+      { tex: "Expand the square inside the sum: $(x_i-\\mu)^2 = x_i^2-2\\mu x_i+\\mu^2$, so $\\displaystyle\\sum(x_i-\\mu)^2 = \\sum x_i^2 - 2\\mu\\sum x_i + n\\mu^2$.", why: "General rule: whenever $\\mu$ (the unknown) is trapped inside a squared term summed over the data, expand the square FIRST — this is what lets you separate the $\\mu$-dependent pieces from the $\\mu$-free pieces." },
+      { tex: "Substitute back: $f_n(x|\\mu) = \\dfrac{1}{(2\\pi)^{n/2}\\sigma^n}\\exp\\left[-\\dfrac{\\sum x_i^2}{2\\sigma^2}\\right]\\cdot\\exp\\left[\\dfrac{\\mu\\sum x_i}{\\sigma^2}-\\dfrac{n\\mu^2}{2\\sigma^2}\\right]$.", why: "Split the single exponential into two separate exponential factors — one holding the $\\mu$-free piece ($\\sum x_i^2$), one holding everything that depends on $\\mu$." },
+      { tex: "Group $u(x) = \\dfrac{1}{(2\\pi)^{n/2}\\sigma^n}\\exp\\left[-\\dfrac{\\sum x_i^2}{2\\sigma^2}\\right]$ (no $\\mu$ — $\\sigma^2$ is known, so it's just a constant here), and $v(T,\\mu)=\\exp\\left[\\dfrac{\\mu T}{\\sigma^2}-\\dfrac{n\\mu^2}{2\\sigma^2}\\right]$ where $T=\\sum x_i$.", why: "" },
+      { tex: "By the Factorization Theorem, $T=\\sum X_i$ is sufficient for $\\mu$. Since $\\bar X = T/n$ is a one-to-one function of $T$, $\\bar X$ is also sufficient.", why: "" },
     ]},
-    { id: "we8-ex5", tex: "\text{Beta, } \alpha \text{ known, } \beta \text{ unknown: } f(x|\beta)=\dfrac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}x^{\alpha-1}(1-x)^{\beta-1}. \text{ Show } T'=\prod(1-X_i) \text{ is sufficient for } \beta.", answer: "\text{Sufficient: } u(x)=\Gamma(\alpha)^{-n}\prod x_i^{\alpha-1},\ v(T',\beta)=\left[\tfrac{\Gamma(\alpha+\beta)}{\Gamma(\beta)}\right]^n (T')^{\beta-1}", steps: [
-      { tex: "Joint density: $f_n(x|\beta) = \displaystyle\prod_{i=1}^n \dfrac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}x_i^{\alpha-1}(1-x_i)^{\beta-1} = \Gamma(\alpha)^{-n}\left[\dfrac{\Gamma(\alpha+\beta)}{\Gamma(\beta)}\right]^n\left(\displaystyle\prod x_i\right)^{\alpha-1}\left(\displaystyle\prod(1-x_i)\right)^{\beta-1}$.", why: "Same grouping strategy: separate the pieces that repeat $n$ times as constants from the pieces built from products over $i$." },
-      { tex: "Since $\alpha$ is KNOWN, group everything without $\beta$: $u(x) = \Gamma(\alpha)^{-n}\left(\displaystyle\prod x_i\right)^{\alpha-1}$.", why: "General rule: a known parameter, even though it appears in the formula, never counts as part of the 'depends on $\theta$' bookkeeping — only the truly unknown parameter matters for the split." },
-      { tex: "Group the $\beta$-dependent piece: $v(T',\beta) = \left[\dfrac{\Gamma(\alpha+\beta)}{\Gamma(\beta)}\right]^n (T')^{\beta-1}$, where $T'=\displaystyle\prod_{i=1}^n(1-x_i)$.", why: "" },
-      { tex: "By the Factorization Theorem, $T'=\prod(1-X_i)$ is sufficient for $\beta$.", why: "Your notes go one step further: since $T = \left[\log(-T')\right]^3/n$ happens to be a one-to-one function of $T'$ (for the specific $T$ they define), $T$ is ALSO sufficient — same information, repackaged." },
+    { id: "we8-ex5", tex: "\\text{Beta, } \\alpha \\text{ known, } \\beta \\text{ unknown: } f(x|\\beta)=\\dfrac{\\Gamma(\\alpha+\\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta)}x^{\\alpha-1}(1-x)^{\\beta-1}. \\text{ Show } T'=\\prod(1-X_i) \\text{ is sufficient for } \\beta.", answer: "\\text{Sufficient: } u(x)=\\Gamma(\\alpha)^{-n}\\prod x_i^{\\alpha-1},\\ v(T',\\beta)=\\left[\\tfrac{\\Gamma(\\alpha+\\beta)}{\\Gamma(\\beta)}\\right]^n (T')^{\\beta-1}", steps: [
+      { tex: "Joint density: $f_n(x|\\beta) = \\displaystyle\\prod_{i=1}^n \\dfrac{\\Gamma(\\alpha+\\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta)}x_i^{\\alpha-1}(1-x_i)^{\\beta-1} = \\Gamma(\\alpha)^{-n}\\left[\\dfrac{\\Gamma(\\alpha+\\beta)}{\\Gamma(\\beta)}\\right]^n\\left(\\displaystyle\\prod x_i\\right)^{\\alpha-1}\\left(\\displaystyle\\prod(1-x_i)\\right)^{\\beta-1}$.", why: "Same grouping strategy: separate the pieces that repeat $n$ times as constants from the pieces built from products over $i$." },
+      { tex: "Since $\\alpha$ is KNOWN, group everything without $\\beta$: $u(x) = \\Gamma(\\alpha)^{-n}\\left(\\displaystyle\\prod x_i\\right)^{\\alpha-1}$.", why: "General rule: a known parameter, even though it appears in the formula, never counts as part of the 'depends on $\\theta$' bookkeeping — only the truly unknown parameter matters for the split." },
+      { tex: "Group the $\\beta$-dependent piece: $v(T',\\beta) = \\left[\\dfrac{\\Gamma(\\alpha+\\beta)}{\\Gamma(\\beta)}\\right]^n (T')^{\\beta-1}$, where $T'=\\displaystyle\\prod_{i=1}^n(1-x_i)$.", why: "" },
+      { tex: "By the Factorization Theorem, $T'=\\prod(1-X_i)$ is sufficient for $\\beta$.", why: "Your notes go one step further: since $T = \\left[\\log(-T')\\right]^3/n$ happens to be a one-to-one function of $T'$ (for the specific $T$ they define), $T$ is ALSO sufficient — same information, repackaged." },
     ]},
-    { id: "we8-ex6", tex: "\text{Uniform}(0,\theta). \text{ Show } T=\max(X_1,\ldots,X_n) \text{ is sufficient for } \theta.", answer: "\text{Sufficient: } u(x)=1,\ v(T,\theta)=\theta^{-n}\,h[T,\theta]", steps: [
-      { tex: "Joint density: $f_n(x|\theta) = \displaystyle\prod_{i=1}^n \dfrac1\theta = \dfrac{1}{\theta^n}$, valid ONLY when every $x_i\in[0,\theta]$; it's 0 otherwise.", why: "" },
-      { tex: "Every $x_i\leq\theta$ (for $i=1,\ldots,n$) is the same condition as $\max(x_1,\ldots,x_n)\leq\theta$.", why: "General rule: 'true for every $i$' conditions like this collapse to a max condition — the same trick used repeatedly in the MLE uniform examples." },
-      { tex: "Define an indicator function $h[\max(x),\theta] = 1$ if $\max(x_1,\ldots,x_n)\leq\theta$, and $0$ otherwise.", why: "General rule: indicator functions are the standard tool for encoding a domain restriction cleanly inside the Factorization Theorem's $v$ piece." },
-      { tex: "Then (for $x_i\geq0$, all $i$) we can write $f_n(x|\theta) = \dfrac{1}{\theta^n}h[\max(x_1,\ldots,x_n),\theta]$.", why: "" },
-      { tex: "Set $u(x)=1$ and $v(T,\theta)=\dfrac{1}{\theta^n}h(T,\theta)$ where $T=\max(x_1,\ldots,x_n)$ — depends on data only through $T$.", why: "" },
-      { tex: "By the Factorization Theorem, $T=\max(X_1,\ldots,X_n)$ is sufficient for $\theta$ — and this matches exactly the MLE we found for this same distribution in Session 7, an example of the general fact that the MLE is a function of the sufficient statistic.", why: "" },
+    { id: "we8-ex6", tex: "\\text{Uniform}(0,\\theta). \\text{ Show } T=\\max(X_1,\\ldots,X_n) \\text{ is sufficient for } \\theta.", answer: "\\text{Sufficient: } u(x)=1,\\ v(T,\\theta)=\\theta^{-n}\\,h[T,\\theta]", steps: [
+      { tex: "Joint density: $f_n(x|\\theta) = \\displaystyle\\prod_{i=1}^n \\dfrac1\\theta = \\dfrac{1}{\\theta^n}$, valid ONLY when every $x_i\\in[0,\\theta]$; it's 0 otherwise.", why: "" },
+      { tex: "Every $x_i\\leq\\theta$ (for $i=1,\\ldots,n$) is the same condition as $\\max(x_1,\\ldots,x_n)\\leq\\theta$.", why: "General rule: 'true for every $i$' conditions like this collapse to a max condition — the same trick used repeatedly in the MLE uniform examples." },
+      { tex: "Define an indicator function $h[\\max(x),\\theta] = 1$ if $\\max(x_1,\\ldots,x_n)\\leq\\theta$, and $0$ otherwise.", why: "General rule: indicator functions are the standard tool for encoding a domain restriction cleanly inside the Factorization Theorem's $v$ piece." },
+      { tex: "Then (for $x_i\\geq0$, all $i$) we can write $f_n(x|\\theta) = \\dfrac{1}{\\theta^n}h[\\max(x_1,\\ldots,x_n),\\theta]$.", why: "" },
+      { tex: "Set $u(x)=1$ and $v(T,\\theta)=\\dfrac{1}{\\theta^n}h(T,\\theta)$ where $T=\\max(x_1,\\ldots,x_n)$ — depends on data only through $T$.", why: "" },
+      { tex: "By the Factorization Theorem, $T=\\max(X_1,\\ldots,X_n)$ is sufficient for $\\theta$ — and this matches exactly the MLE we found for this same distribution in Session 7, an example of the general fact that the MLE is a function of the sufficient statistic.", why: "" },
     ]},
-    { id: "we8-ex7", tex: "f(x|\alpha)=\dfrac{\Gamma(2\alpha)}{\Gamma(\alpha)^2}[x(1-x)]^{\alpha-1} \text{ on } [0,1]. \text{ Find a sufficient statistic for } \alpha \text{ (direct factorization).}", answer: "T=\prod X_i(1-X_i)", steps: [
-      { tex: "Joint density: $f_n(x|\alpha) = \displaystyle\prod_{i=1}^n \dfrac{\Gamma(2\alpha)}{\Gamma(\alpha)^2}[x_i(1-x_i)]^{\alpha-1} = \left[\dfrac{\Gamma(2\alpha)}{\Gamma(\alpha)^2}\right]^n\left(\displaystyle\prod_{i=1}^n x_i(1-x_i)\right)^{\alpha-1}$.", why: "The constant piece repeats $n$ times; the $[x_i(1-x_i)]^{\alpha-1}$ factors combine since they share the exponent $\alpha-1$." },
-      { tex: "Set $u(x)=1$ and $v(T,\alpha) = \left[\dfrac{\Gamma(2\alpha)}{\Gamma(\alpha)^2}\right]^n T^{\alpha-1}$, where $T=\displaystyle\prod_{i=1}^n x_i(1-x_i)$.", why: "" },
-      { tex: "By the Factorization Theorem, $T=\prod X_i(1-X_i)$ is sufficient for $\alpha$.", why: "Session 9 revisits this exact distribution using the exponential-family shortcut, and gets a statistic that LOOKS different ($\sum\log[X_i(1-X_i)]$) but is a one-to-one (log) function of this $T$ — so both are valid sufficient statistics." },
+    { id: "we8-ex7", tex: "f(x|\\alpha)=\\dfrac{\\Gamma(2\\alpha)}{\\Gamma(\\alpha)^2}[x(1-x)]^{\\alpha-1} \\text{ on } [0,1]. \\text{ Find a sufficient statistic for } \\alpha \\text{ (direct factorization).}", answer: "T=\\prod X_i(1-X_i)", steps: [
+      { tex: "Joint density: $f_n(x|\\alpha) = \\displaystyle\\prod_{i=1}^n \\dfrac{\\Gamma(2\\alpha)}{\\Gamma(\\alpha)^2}[x_i(1-x_i)]^{\\alpha-1} = \\left[\\dfrac{\\Gamma(2\\alpha)}{\\Gamma(\\alpha)^2}\\right]^n\\left(\\displaystyle\\prod_{i=1}^n x_i(1-x_i)\\right)^{\\alpha-1}$.", why: "The constant piece repeats $n$ times; the $[x_i(1-x_i)]^{\\alpha-1}$ factors combine since they share the exponent $\\alpha-1$." },
+      { tex: "Set $u(x)=1$ and $v(T,\\alpha) = \\left[\\dfrac{\\Gamma(2\\alpha)}{\\Gamma(\\alpha)^2}\\right]^n T^{\\alpha-1}$, where $T=\\displaystyle\\prod_{i=1}^n x_i(1-x_i)$.", why: "" },
+      { tex: "By the Factorization Theorem, $T=\\prod X_i(1-X_i)$ is sufficient for $\\alpha$.", why: "Session 9 revisits this exact distribution using the exponential-family shortcut, and gets a statistic that LOOKS different ($\\sum\\log[X_i(1-X_i)]$) but is a one-to-one (log) function of this $T$ — so both are valid sufficient statistics." },
     ]},
   ],
   9: [
-    { id: "we9-bernoulli", tex: "\text{Show the Bernoulli}(\theta) \text{ distribution belongs to the exponential family, and identify the sufficient statistic.}", answer: "T(x)=x,\ \text{sufficient statistic is} \sum X_i", steps: [
-      { tex: "Start from the Bernoulli PMF: $P(X=x) = \theta^x(1-\theta)^{1-x}$ for $x=0$ or $x=1$.", why: "" },
-      { tex: "Rewrite using the identity $a = e^{\log a}$: $\theta^x(1-\theta)^{1-x} = \exp\left[x\log\theta + (1-x)\log(1-\theta)\right]$.", why: "General rule: to force a density into exponential-family form, the standard first move is rewriting everything as $e^{\log(\cdots)}$, then simplifying the exponent algebraically." },
-      { tex: "Expand the exponent: $x\log\theta + \log(1-\theta) - x\log(1-\theta) = x\left[\log\theta - \log(1-\theta)\right] + \log(1-\theta)$.", why: "General rule: group all the terms containing $x$ together, and all the terms without $x$ together." },
-      { tex: "Simplify using log rules: $\log\theta - \log(1-\theta) = \log\left(\dfrac{\theta}{1-\theta}\right)$.", why: "" },
-      { tex: "So $P(X=x) = \exp\left[x\log\left(\dfrac{\theta}{1-\theta}\right) + \log(1-\theta)\right]$ — matching $\exp[c(\theta)T(x)+d(\theta)+S(x)]$ with $c(\theta)=\log\left(\dfrac{\theta}{1-\theta}\right)$, $T(x)=x$, $d(\theta)=\log(1-\theta)$, $S(x)=0$.", why: "" },
-      { tex: "Sufficient statistic: $\displaystyle\sum_{i=1}^n T(X_i) = \sum_{i=1}^n X_i$.", why: "Matches Session 8's direct proof exactly — the exponential family shortcut gets there faster." },
+    { id: "we9-bernoulli", tex: "\\text{Show the Bernoulli}(\\theta) \\text{ distribution belongs to the exponential family, and identify the sufficient statistic.}", answer: "T(x)=x,\\ \\text{sufficient statistic is} \\sum X_i", steps: [
+      { tex: "Start from the Bernoulli PMF: $P(X=x) = \\theta^x(1-\\theta)^{1-x}$ for $x=0$ or $x=1$.", why: "" },
+      { tex: "Rewrite using the identity $a = e^{\\log a}$: $\\theta^x(1-\\theta)^{1-x} = \\exp\\left[x\\log\\theta + (1-x)\\log(1-\\theta)\\right]$.", why: "General rule: to force a density into exponential-family form, the standard first move is rewriting everything as $e^{\\log(\\cdots)}$, then simplifying the exponent algebraically." },
+      { tex: "Expand the exponent: $x\\log\\theta + \\log(1-\\theta) - x\\log(1-\\theta) = x\\left[\\log\\theta - \\log(1-\\theta)\\right] + \\log(1-\\theta)$.", why: "General rule: group all the terms containing $x$ together, and all the terms without $x$ together." },
+      { tex: "Simplify using log rules: $\\log\\theta - \\log(1-\\theta) = \\log\\left(\\dfrac{\\theta}{1-\\theta}\\right)$.", why: "" },
+      { tex: "So $P(X=x) = \\exp\\left[x\\log\\left(\\dfrac{\\theta}{1-\\theta}\\right) + \\log(1-\\theta)\\right]$ — matching $\\exp[c(\\theta)T(x)+d(\\theta)+S(x)]$ with $c(\\theta)=\\log\\left(\\dfrac{\\theta}{1-\\theta}\\right)$, $T(x)=x$, $d(\\theta)=\\log(1-\\theta)$, $S(x)=0$.", why: "" },
+      { tex: "Sufficient statistic: $\\displaystyle\\sum_{i=1}^n T(X_i) = \\sum_{i=1}^n X_i$.", why: "Matches Session 8's direct proof exactly — the exponential family shortcut gets there faster." },
     ]},
-    { id: "we9-beta", tex: "f(x|\alpha)=\dfrac{\Gamma(2\alpha)}{\Gamma(\alpha)^2}[x(1-x)]^{\alpha-1}. \text{ Find the sufficient statistic by verifying exponential family membership.}", answer: "T(x)=\log[x(1-x)],\ \text{sufficient statistic} \sum\log[X_i(1-X_i)]", steps: [
-      { tex: "Rewrite: $\dfrac{\Gamma(2\alpha)}{\Gamma(\alpha)^2}[x(1-x)]^{\alpha-1} = \exp\Big\{\log\Gamma(2\alpha)-2\log\Gamma(\alpha) + (\alpha-1)\log[x(1-x)]\Big\}$.", why: "Same opening move as always — rewrite as $e^{\log(\cdots)}$, using $\log(a^{\alpha-1})=(\alpha-1)\log a$ on the last factor." },
-      { tex: "Expand the $(\alpha-1)\log[x(1-x)]$ term: $= \alpha\log[x(1-x)] - \log[x(1-x)]$.", why: "Distribute $(\alpha-1)$ across the single term — this separates the $\alpha$-multiplied piece from the $x$-only piece." },
-      { tex: "Match to the template: $T(x)=\log[x(1-x)]$, $c(\alpha)=\alpha$, $S(x)=-\log[x(1-x)]$, $d(\alpha)=\log\Gamma(2\alpha)-2\log\Gamma(\alpha)$.", why: "" },
-      { tex: "Sufficient statistic: $\displaystyle\sum_{i=1}^n \log[X_i(1-X_i)] = \log\left[\displaystyle\prod_{i=1}^n X_i(1-X_i)\right]$.", why: "This is a one-to-one (log) function of the $T=\prod X_i(1-X_i)$ found directly via factorization in Session 8 — both are valid sufficient statistics for the same reason (the one-to-one-function property)." },
+    { id: "we9-beta", tex: "f(x|\\alpha)=\\dfrac{\\Gamma(2\\alpha)}{\\Gamma(\\alpha)^2}[x(1-x)]^{\\alpha-1}. \\text{ Find the sufficient statistic by verifying exponential family membership.}", answer: "T(x)=\\log[x(1-x)],\\ \\text{sufficient statistic} \\sum\\log[X_i(1-X_i)]", steps: [
+      { tex: "Rewrite: $\\dfrac{\\Gamma(2\\alpha)}{\\Gamma(\\alpha)^2}[x(1-x)]^{\\alpha-1} = \\exp\\Big\\{\\log\\Gamma(2\\alpha)-2\\log\\Gamma(\\alpha) + (\\alpha-1)\\log[x(1-x)]\\Big\\}$.", why: "Same opening move as always — rewrite as $e^{\\log(\\cdots)}$, using $\\log(a^{\\alpha-1})=(\\alpha-1)\\log a$ on the last factor." },
+      { tex: "Expand the $(\\alpha-1)\\log[x(1-x)]$ term: $= \\alpha\\log[x(1-x)] - \\log[x(1-x)]$.", why: "Distribute $(\\alpha-1)$ across the single term — this separates the $\\alpha$-multiplied piece from the $x$-only piece." },
+      { tex: "Match to the template: $T(x)=\\log[x(1-x)]$, $c(\\alpha)=\\alpha$, $S(x)=-\\log[x(1-x)]$, $d(\\alpha)=\\log\\Gamma(2\\alpha)-2\\log\\Gamma(\\alpha)$.", why: "" },
+      { tex: "Sufficient statistic: $\\displaystyle\\sum_{i=1}^n \\log[X_i(1-X_i)] = \\log\\left[\\displaystyle\\prod_{i=1}^n X_i(1-X_i)\\right]$.", why: "This is a one-to-one (log) function of the $T=\\prod X_i(1-X_i)$ found directly via factorization in Session 8 — both are valid sufficient statistics for the same reason (the one-to-one-function property)." },
     ]},
-    { id: "we9-gamma", tex: "\text{Show the Gamma distribution, } f(x|\alpha,\beta)=\dfrac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x}, \text{ belongs to the exponential family (both parameters unknown).}", answer: "T_1(x)=x,\ T_2(x)=\log x;\ \text{sufficient statistics} \left(\sum X_i,\ \sum\log X_i\right)", steps: [
-      { tex: "Rewrite: $\dfrac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x} = \exp\Big\{-\beta x + (\alpha-1)\log x + \alpha\log\beta - \log\Gamma(\alpha)\Big\}$.", why: "Same log-rewrite move, now with two separate places where $x$ appears: once linearly (in $-\beta x$) and once logarithmically (in $(\alpha-1)\log x$)." },
-      { tex: "This has TWO unknown parameters, so match to the two-parameter template $\exp[c_1(\theta)T_1(x)+c_2(\theta)T_2(x)+d(\theta)+S(x)]$: $c_1(\alpha,\beta)=-\beta$, $T_1(x)=x$; $c_2(\alpha,\beta)=\alpha-1$, $T_2(x)=\log x$; $d(\alpha,\beta)=\alpha\log\beta-\log\Gamma(\alpha)$; $S(x)=0$.", why: "General rule: a $k$-parameter exponential family needs $k$ separate $(c_i,T_i)$ pairs — here $k=2$ since both $\alpha$ and $\beta$ are unknown." },
-      { tex: "Sufficient statistics: $\left(\displaystyle\sum_{i=1}^n X_i,\ \sum_{i=1}^n\log X_i\right)$ — a PAIR of statistics, jointly sufficient for the pair $(\alpha,\beta)$.", why: "General rule: with a $k$-parameter exponential family, you get $k$ sufficient statistics together, not one — they must be used as a pair (or tuple) to retain all the information about both parameters." },
+    { id: "we9-gamma", tex: "\\text{Show the Gamma distribution, } f(x|\\alpha,\\beta)=\\dfrac{\\beta^\\alpha}{\\Gamma(\\alpha)}x^{\\alpha-1}e^{-\\beta x}, \\text{ belongs to the exponential family (both parameters unknown).}", answer: "T_1(x)=x,\\ T_2(x)=\\log x;\\ \\text{sufficient statistics} \\left(\\sum X_i,\\ \\sum\\log X_i\\right)", steps: [
+      { tex: "Rewrite: $\\dfrac{\\beta^\\alpha}{\\Gamma(\\alpha)}x^{\\alpha-1}e^{-\\beta x} = \\exp\\Big\\{-\\beta x + (\\alpha-1)\\log x + \\alpha\\log\\beta - \\log\\Gamma(\\alpha)\\Big\\}$.", why: "Same log-rewrite move, now with two separate places where $x$ appears: once linearly (in $-\\beta x$) and once logarithmically (in $(\\alpha-1)\\log x$)." },
+      { tex: "This has TWO unknown parameters, so match to the two-parameter template $\\exp[c_1(\\theta)T_1(x)+c_2(\\theta)T_2(x)+d(\\theta)+S(x)]$: $c_1(\\alpha,\\beta)=-\\beta$, $T_1(x)=x$; $c_2(\\alpha,\\beta)=\\alpha-1$, $T_2(x)=\\log x$; $d(\\alpha,\\beta)=\\alpha\\log\\beta-\\log\\Gamma(\\alpha)$; $S(x)=0$.", why: "General rule: a $k$-parameter exponential family needs $k$ separate $(c_i,T_i)$ pairs — here $k=2$ since both $\\alpha$ and $\\beta$ are unknown." },
+      { tex: "Sufficient statistics: $\\left(\\displaystyle\\sum_{i=1}^n X_i,\\ \\sum_{i=1}^n\\log X_i\\right)$ — a PAIR of statistics, jointly sufficient for the pair $(\\alpha,\\beta)$.", why: "General rule: with a $k$-parameter exponential family, you get $k$ sufficient statistics together, not one — they must be used as a pair (or tuple) to retain all the information about both parameters." },
     ]},
   ],
 };
@@ -605,7 +605,7 @@ const HW_MOM = [
   { id: "mom-ex2", tex: "f(x|\\alpha)=\\dfrac{\\Gamma(2\\alpha)}{\\Gamma(\\alpha)^2}[x(1-x)]^{\\alpha-1} \\text{ on } [0,1]. \\text{ Given } E(X)=\\tfrac12,\\ \\text{Var}(X)=\\dfrac{1}{4(2\\alpha+1)}. \\text{ Find the MoM estimator } \\hat\\alpha.", answer: "\\hat\\alpha = \\dfrac{1-2m_2}{4m_2-1}, \\quad m_2=\\tfrac1n\\sum X_i^2", steps: [
     { tex: "Try $k=1$ first: you're TOLD $E(X)=\\tfrac12$ directly — but this is just a fixed number, with NO $\\alpha$ in it.", why: "General rule: always check whether the given moment formula actually contains the unknown parameter before setting up an equation — here it clearly doesn't." },
     { tex: "Since $E(X)=\\tfrac12$ violates the second rule (must contain $\\alpha$), $k=1$ is useless here. Move to $k=2$.", why: "This is the exact situation the rule warns about — recognize it and move on immediately rather than trying to force $k=1$ to work." },
-    { tex: "Use the identity $\\text{Var}(X) = E(X^2)-[E(X)]^2$, rearranged: $\\mu_2 = E(X^2) = \\text{Var}(X)+[E(X)]^2 = \\dfrac{1}{4(2\\alpha+1)}+\\dfrac14$.", why: "General rule: when you're given Var$(X)$ and $E(X)$ instead of $E(X^2)$ directly, this identity converts between them — much easier than re-deriving $E(X^2)$ from scratch by integration." },
+    { tex: "Use the identity $\\text{Var}(X) = E(X^2)-[E(X)]^2$, rearranged: $\\mu_2 = E(X^2) = \\text{Var}(X)+[E(X)]^2 = \\dfrac{1}{4(2\\alpha+1)}+\\dfrac14$.", why: "General rule: when you're given Var $(X)$ and $E(X)$ instead of $E(X^2)$ directly, this identity converts between them — much easier than re-deriving $E(X^2)$ from scratch by integration." },
     { tex: "Set $\\mu_2 = m_2$ (the sample second moment): $\\dfrac{1}{4(2\\alpha+1)}+\\dfrac14 = m_2$.", why: "" },
     { tex: "Isolate the $\\alpha$-term: $\\dfrac{1}{4(2\\alpha+1)} = m_2-\\dfrac14$.", why: "" },
     { tex: "Take the reciprocal of both sides: $4(2\\alpha+1) = \\dfrac{1}{m_2-\\tfrac14}$. Multiply top and bottom of the right side by 4 to clear the fraction inside: $\\dfrac{1}{m_2-\\tfrac14} = \\dfrac{4}{4m_2-1}$.", why: "General rule: when a fraction like $m_2-\\tfrac14$ sits in a denominator, multiplying numerator and denominator by 4 clears the internal fraction — much easier to work with $4m_2-1$ than $m_2-\\tfrac14$." },
@@ -622,7 +622,7 @@ const HW_MLE = [
     { tex: "Differentiate with respect to $\\lambda$ — the last term ($\\sum\\log x_i!$) has no $\\lambda$, so its derivative is 0: $\\dfrac{dl}{d\\lambda} = \\dfrac{1}{\\lambda}\\displaystyle\\sum_{i=1}^n x_i - n$.", why: "General rule: any term with no $\\theta$ in it always differentiates to 0 — don't forget to drop it, but also don't forget it was there when writing $l(\\theta)$ itself." },
     { tex: "Set the derivative to 0: $\\dfrac{1}{\\lambda}\\displaystyle\\sum x_i - n = 0 \\implies \\dfrac{1}{\\lambda}\\sum x_i = n$.", why: "" },
     { tex: "Solve for $\\lambda$: $\\displaystyle\\sum x_i = n\\lambda \\implies \\lambda = \\dfrac{1}{n}\\sum x_i = \\bar x$.", why: "" },
-    { tex: "$\\hat\\lambda_{MLE} = \\bar X$", why: "Worth noting: this matches what Method of Moments would also give here — a case where the two methods agree." },
+    { tex: "$\\hat\\lambda_{MLE} = \\bar X$", why: "Worth noting: this matches what Method of Moment would also give here — a case where the two methods agree." },
   ]},
   { id: "mle-ex4", tex: "\\text{Let } X_1,\\ldots,X_n \\text{ be i.i.d. with } f(x|\\theta)=\\theta x^{\\theta-1} \\text{ for } 0<x<1,\\ \\theta>0. \\text{ Find the MLE } \\hat\\theta.", answer: "\\hat\\theta = \\dfrac{-n}{\\sum_{i=1}^n \\log X_i}", steps: [
     { tex: "Log-likelihood: $l(\\theta) = \\displaystyle\\sum_{i=1}^n \\log\\left(\\theta x_i^{\\theta-1}\\right) = \\sum_{i=1}^n\\left[\\log\\theta + (\\theta-1)\\log x_i\\right]$.", why: "General rule: $\\log(ab)=\\log a+\\log b$, applied to the product $\\theta \\cdot x_i^{\\theta-1}$, then $\\log(x_i^{\\theta-1}) = (\\theta-1)\\log x_i$ by the power rule for logs." },
@@ -668,7 +668,7 @@ const HW_MLE = [
     { tex: "The condition '$\\theta_1\\leq X_i$ for all $i$' means $\\theta_1\\leq\\min(X_i)$; the condition '$X_i\\leq\\theta_2$ for all $i$' means $\\theta_2\\geq\\max(X_i)$.", why: "Same min/max collapsing trick used throughout every uniform-distribution problem in this course." },
     { tex: "To maximize $\\dfrac{1}{(\\theta_2-\\theta_1)^n}$, we want the WIDTH $(\\theta_2-\\theta_1)$ to be as SMALL as possible, since a smaller denominator base means a bigger overall fraction.", why: "General rule: $1/(\\text{width})^n$ is maximized by making the width as tight as the constraints allow — no calculus needed, just minimize the gap." },
     { tex: "The tightest possible interval that still contains every data point is exactly $[\\min(X_i),\\max(X_i)]$ — any tighter and some data point would fall outside.", why: "" },
-    { tex: "$\\hat\\theta_1 = \\min(X_1,\\ldots,X_n)$, $\\hat\\theta_2 = \\max(X_1,\\ldots,X_n)$", why: "A natural two-parameter generalization of the single-parameter Uniform$(0,\\theta)$ result from Session 7." },
+    { tex: "$\\hat\\theta_1 = \\min(X_1,\\ldots,X_n)$, $\\hat\\theta_2 = \\max(X_1,\\ldots,X_n)$", why: "A natural two-parameter generalization of the single-parameter Uniform $(0,\\theta)$ result from Session 7." },
   ]},
 ];
 
@@ -749,10 +749,10 @@ const HW_EXPFAMILY = [
 
 const REFRESHER_QUIZ = {
   6: [
-    { q: "Method of Moments solves the equation:", options: ["mu_k = 0", "mu_k = m_k", "m_k = 0", "mu_k = m_k^2"], answer: 1 },
+    { q: "Method of Moment solves the equation:", options: ["mu_k = 0", "mu_k = m_k", "m_k = 0", "mu_k = m_k^2"], answer: 1 },
     { q: "The 'second rule' for picking k in MoM is:", options: ["k should be as large as possible", "mu_k must contain the unknown parameter", "k must equal the number of data points", "k must be even"], answer: 1 },
     { q: "The sample moment m_k is:", options: ["A formula involving theta", "The average of X_i^k across your data", "Always equal to 0", "The variance of the sample"], answer: 1 },
-    { q: "Why does Method of Moments work at all (theoretical justification)?", options: ["The Central Limit Theorem", "The Law of Large Numbers (m_k converges to mu_k)", "Bayes' Theorem", "It doesn't have a justification"], answer: 1 },
+    { q: "Why does Method of Moment work at all (theoretical justification)?", options: ["The Central Limit Theorem", "The Law of Large Numbers (m_k converges to mu_k)", "Bayes' Theorem", "It doesn't have a justification"], answer: 1 },
   ],
   7: [
     { q: "The likelihood function L(theta) is defined as:", options: ["The sum of f(x_i|theta)", "The product of f(x_i|theta)", "The average of the data", "The CDF of the data"], answer: 1 },
@@ -775,7 +775,7 @@ const REFRESHER_QUIZ = {
 };
 
 const SESSION_HW_MAP = {
-  6: { data: HW_MOM, label: "Method of Moments - real exercises from Dr. Zheng's notes." },
+  6: { data: HW_MOM, label: "Method of Moment - real exercises from Dr. Zheng's notes." },
   7: { data: HW_MLE, label: "MLE - notes exercises plus real HW4 #1 (exponential median, using MLE invariance)." },
   8: { data: HW_SUFFICIENT, label: "Sufficient Statistics - real exercises verifying sufficiency via factorization." },
   9: { data: HW_EXPFAMILY, label: "Exponential Family - verifying membership and reading off the sufficient statistic." },
@@ -783,11 +783,219 @@ const SESSION_HW_MAP = {
 const SESSION_QUIZ_MAP = { 6: REFRESHER_QUIZ[6], 7: REFRESHER_QUIZ[7], 8: REFRESHER_QUIZ[8], 9: REFRESHER_QUIZ[9] };
 
 const ALL_PROBLEMS = [
-  ...HW_MOM.map((p) => ({ id: p.id, label: "Method of Moments", ref: p })),
+  ...HW_MOM.map((p) => ({ id: p.id, label: "Method of Moment", ref: p })),
   ...HW_MLE.map((p) => ({ id: p.id, label: "MLE", ref: p })),
   ...HW_SUFFICIENT.map((p) => ({ id: p.id, label: "Sufficient Statistics", ref: p })),
   ...HW_EXPFAMILY.map((p) => ({ id: p.id, label: "Exponential Family", ref: p })),
 ];
+
+/* ============================================================
+   SESSIONS 1-5 — foundational review, written fresh (not
+   copied from any textbook) to match standard mathematical
+   statistics treatment, every step shown, verified by hand.
+============================================================ */
+Object.assign(WORKED_EXAMPLES, {
+  1: [
+    { id: "we1-discrete", tex: "\\text{Roll a fair six-sided die. Let } X \\text{ be the number shown. Find } E(X) \\text{ and } \\text{Var}(X).", answer: "E(X)=3.5,\\ \\text{Var}(X)=\\tfrac{35}{12}", steps: [
+      { tex: "List the PMF: $P(X=x)=\\tfrac16$ for $x=1,2,3,4,5,6$ (each outcome equally likely).", why: "General rule: for a discrete uniform distribution over $n$ equally likely outcomes, every probability is simply $1/n$." },
+      { tex: "$E(X) = \\displaystyle\\sum_{x=1}^6 x\\cdot\\tfrac16 = \\tfrac16(1+2+3+4+5+6) = \\tfrac{21}{6} = 3.5$.", why: "General rule: $E(X)=\\sum xP(x)$ — multiply each value by its own probability, then add." },
+      { tex: "To find the variance, first find $E(X^2) = \\displaystyle\\sum_{x=1}^6 x^2\\cdot\\tfrac16 = \\tfrac16(1+4+9+16+25+36) = \\tfrac{91}{6}$.", why: "General rule: use $\\text{LOTUS}$ (the Law of the Unconscious Statistician) — $E[g(X)]=\\sum g(x)P(x)$ — here with $g(x)=x^2$." },
+      { tex: "Apply the variance shortcut: $\\text{Var}(X)=E(X^2)-[E(X)]^2 = \\tfrac{91}{6}-(3.5)^2 = \\tfrac{91}{6}-\\tfrac{49}{4}$.", why: "General rule: $\\text{Var}(X)=E(X^2)-[E(X)]^2$ is almost always faster than computing $E[(X-\\mu)^2]$ directly from the definition." },
+      { tex: "Common denominator of 12: $\\tfrac{91}{6}=\\tfrac{182}{12}$, $\\tfrac{49}{4}=\\tfrac{147}{12}$. So $\\text{Var}(X) = \\tfrac{182-147}{12}=\\tfrac{35}{12}\\approx2.92$.", why: "" },
+    ]},
+    { id: "we1-continuous", tex: "\\text{Let } f(x)=3x^2 \\text{ for } 0\\leq x\\leq1. \\text{ Find the CDF } F(x), \\text{ then compute } P(0.2\\leq X\\leq0.8).", answer: "F(x)=x^3;\\quad P(0.2\\leq X\\leq0.8)=0.504", steps: [
+      { tex: "First confirm this is a valid PDF: $\\displaystyle\\int_0^1 3x^2\\,dx = \\left[x^3\\right]_0^1 = 1$. Good, it integrates to 1.", why: "General rule: always sanity-check that a given density actually integrates to 1 over its stated range before trusting it — this catches typos in the problem and builds the habit for when YOU construct densities later." },
+      { tex: "The CDF is $F(x)=P(X\\leq x)=\\displaystyle\\int_0^x 3t^2\\,dt = \\left[t^3\\right]_0^x = x^3$, for $0\\leq x\\leq1$.", why: "General rule: $F(x)=\\int_{-\\infty}^x f(t)\\,dt$ — integrate the density from the left edge of its support up to $x$." },
+      { tex: "$P(0.2\\leq X\\leq0.8) = F(0.8)-F(0.2) = (0.8)^3-(0.2)^3$.", why: "General rule: $P(a\\leq X\\leq b)=F(b)-F(a)$ for any continuous random variable — this is often faster than re-integrating the density directly." },
+      { tex: "$(0.8)^3=0.512$, $(0.2)^3=0.008$. So $P(0.2\\leq X\\leq0.8) = 0.512-0.008=0.504$.", why: "" },
+    ]},
+  ],
+  2: [
+    { id: "we2-discrete", tex: "\\text{Joint PMF: } P(1,1)=0.1,\\ P(1,2)=0.2,\\ P(2,1)=0.3,\\ P(2,2)=0.4. \\text{ Find the marginals, and check independence.}", answer: "\\text{Not independent}", steps: [
+      { tex: "Marginal of $X$: sum the joint probabilities across each row (fix $x$, add over all $y$). $P_X(1)=P(1,1)+P(1,2)=0.1+0.2=0.3$. $P_X(2)=P(2,1)+P(2,2)=0.3+0.4=0.7$.", why: "General rule: the marginal PMF of $X$ is obtained by summing the joint PMF over ALL values of $Y$ — 'marginalizing out' $Y$." },
+      { tex: "Marginal of $Y$: sum down each column. $P_Y(1)=P(1,1)+P(2,1)=0.1+0.3=0.4$. $P_Y(2)=P(1,2)+P(2,2)=0.2+0.4=0.6$.", why: "Same idea, the other direction — sum over all values of $X$ to marginalize it out." },
+      { tex: "Check both marginals sum to 1: $P_X$: $0.3+0.7=1$ ✓. $P_Y$: $0.4+0.6=1$ ✓.", why: "General rule: always verify marginals sum to 1 — an easy self-check that catches arithmetic slips." },
+      { tex: "For independence, EVERY joint probability must equal the product of its marginals: check $P(1,1)=0.1$ against $P_X(1)P_Y(1)=0.3\\times0.4=0.12$.", why: "General rule: independence requires $P(x,y)=P_X(x)P_Y(y)$ for ALL $(x,y)$ pairs — finding even ONE pair where this fails is enough to conclude the variables are NOT independent." },
+      { tex: "Since $0.1\\neq0.12$, $X$ and $Y$ are NOT independent — no need to check the remaining pairs once one fails.", why: "" },
+    ]},
+    { id: "we2-continuous", tex: "\\text{Joint density } f(x,y)=x+y \\text{ on } [0,1]\\times[0,1]. \\text{ Find the marginal density } f_X(x).", answer: "f_X(x) = x+\\tfrac12", steps: [
+      { tex: "Confirm it's a valid joint density: $\\displaystyle\\int_0^1\\int_0^1(x+y)\\,dx\\,dy$. Inner integral: $\\displaystyle\\int_0^1(x+y)\\,dx = \\left[\\tfrac{x^2}{2}+xy\\right]_0^1 = \\tfrac12+y$.", why: "General rule: work double integrals from the inside out — integrate with respect to one variable first, treating the other as a constant." },
+      { tex: "Outer integral: $\\displaystyle\\int_0^1\\left(\\tfrac12+y\\right)dy = \\left[\\tfrac{y}{2}+\\tfrac{y^2}{2}\\right]_0^1 = \\tfrac12+\\tfrac12=1$. Confirmed valid.", why: "" },
+      { tex: "The marginal density $f_X(x) = \\displaystyle\\int_0^1 f(x,y)\\,dy = \\int_0^1(x+y)\\,dy$.", why: "General rule: to get the marginal of $X$ from a continuous joint density, integrate OUT $y$ over its whole range — the continuous analog of summing out a discrete variable." },
+      { tex: "$= \\left[xy+\\tfrac{y^2}{2}\\right]_0^1 = x+\\tfrac12$.", why: "" },
+      { tex: "Sanity check: $\\displaystyle\\int_0^1\\left(x+\\tfrac12\\right)dx = \\left[\\tfrac{x^2}{2}+\\tfrac{x}{2}\\right]_0^1=\\tfrac12+\\tfrac12=1$ — a valid marginal density on its own.", why: "General rule: any marginal density you compute should itself integrate to 1 — a quick way to catch mistakes." },
+    ]},
+  ],
+  3: [
+    { id: "we3-mgf-bernoulli", tex: "\\text{Find the MGF of a Bernoulli}(\\theta) \\text{ random variable, and use it to find } E(X) \\text{ and Var}(X).", answer: "M(t)=(1-\\theta)+\\theta e^t;\\quad E(X)=\\theta,\\ \\text{Var}(X)=\\theta(1-\\theta)", steps: [
+      { tex: "By definition, $M(t)=E(e^{tX}) = \\displaystyle\\sum_x e^{tx}P(X=x) = e^{t\\cdot0}(1-\\theta)+e^{t\\cdot1}\\theta$.", why: "General rule: for a discrete random variable, build the MGF by summing $e^{tx}$ weighted by each outcome's probability — same structure as computing any other expectation." },
+      { tex: "$= (1-\\theta)+\\theta e^t$.", why: "$e^{0}=1$, so the first term simplifies to just $(1-\\theta)$." },
+      { tex: "To get $E(X)$, differentiate once and evaluate at $t=0$: $M'(t)=\\theta e^t$, so $M'(0)=\\theta e^0=\\theta$.", why: "General rule: $M'(0)=E(X)$ always — this is exactly what makes MGFs useful, they package every moment into one function." },
+      { tex: "To get $E(X^2)$, differentiate again: $M''(t)=\\theta e^t$ (same as $M'$ here, since differentiating $e^t$ just reproduces itself), so $M''(0)=\\theta$.", why: "General rule: $M''(0)=E(X^2)$." },
+      { tex: "$\\text{Var}(X)=E(X^2)-[E(X)]^2 = \\theta-\\theta^2=\\theta(1-\\theta)$.", why: "Matches the well-known Bernoulli variance formula — a good confirmation the MGF approach works." },
+    ]},
+    { id: "we3-mgf-poisson", tex: "\\text{Find the MGF of a Poisson}(\\lambda) \\text{ random variable, then use MGFs to show that if } X\\sim\\text{Poisson}(\\lambda_1) \\text{ and } Y\\sim\\text{Poisson}(\\lambda_2) \\text{ are independent, } X+Y\\sim\\text{Poisson}(\\lambda_1+\\lambda_2).", answer: "M(t)=e^{\\lambda(e^t-1)};\\quad X+Y\\sim\\text{Poisson}(\\lambda_1+\\lambda_2)", steps: [
+      { tex: "$M(t) = \\displaystyle\\sum_{x=0}^\\infty e^{tx}\\cdot\\dfrac{e^{-\\lambda}\\lambda^x}{x!} = e^{-\\lambda}\\displaystyle\\sum_{x=0}^\\infty \\dfrac{(\\lambda e^t)^x}{x!}$.", why: "General rule: pull the $e^{-\\lambda}$ constant out of the sum, and combine $e^{tx}\\lambda^x=(\\lambda e^t)^x$ using exponent rules." },
+      { tex: "Recognize the remaining sum as the Taylor series for $e^{(\\cdot)}$: $\\displaystyle\\sum_{x=0}^\\infty \\dfrac{(\\lambda e^t)^x}{x!} = e^{\\lambda e^t}$.", why: "General rule: memorize $\\sum_{k=0}^\\infty \\tfrac{a^k}{k!}=e^a$ — this exact series shows up constantly when finding MGFs of Poisson-type distributions." },
+      { tex: "So $M(t) = e^{-\\lambda}\\cdot e^{\\lambda e^t} = e^{\\lambda e^t-\\lambda} = e^{\\lambda(e^t-1)}$.", why: "" },
+      { tex: "Since $X,Y$ are independent, the MGF of their sum is the PRODUCT of their individual MGFs: $M_{X+Y}(t) = M_X(t)M_Y(t) = e^{\\lambda_1(e^t-1)}\\cdot e^{\\lambda_2(e^t-1)}$.", why: "General rule: for INDEPENDENT random variables, $E[e^{t(X+Y)}]=E[e^{tX}]E[e^{tY}]$ — expectation of a product of independent things is the product of expectations." },
+      { tex: "$= e^{(\\lambda_1+\\lambda_2)(e^t-1)}$ — this is EXACTLY the MGF of a Poisson $(\\lambda_1+\\lambda_2)$ distribution.", why: "General rule (uniqueness of MGFs): if two random variables have the same MGF, they have the same distribution. Recognizing the resulting MGF's 'shape' tells you the distribution immediately, no further work needed." },
+      { tex: "Therefore $X+Y\\sim\\text{Poisson}(\\lambda_1+\\lambda_2)$.", why: "" },
+    ]},
+  ],
+  4: [
+    { id: "we4-gamma-normalize", tex: "\\text{Verify that the Gamma density } f(x|\\alpha,\\beta)=\\dfrac{\\beta^\\alpha}{\\Gamma(\\alpha)}x^{\\alpha-1}e^{-\\beta x} \\text{ (for } x>0\\text{) integrates to 1, and find } E(X).", answer: "\\text{Integrates to 1; } E(X)=\\dfrac{\\alpha}{\\beta}", steps: [
+      { tex: "Recall the definition of the Gamma FUNCTION: $\\Gamma(\\alpha) = \\displaystyle\\int_0^\\infty u^{\\alpha-1}e^{-u}\\,du$ — this is the key reference integral for everything in this session.", why: "General rule: memorize this definition cold — nearly every Gamma-distribution computation reduces to matching an integral against this exact form." },
+      { tex: "To check $\\displaystyle\\int_0^\\infty \\dfrac{\\beta^\\alpha}{\\Gamma(\\alpha)}x^{\\alpha-1}e^{-\\beta x}\\,dx=1$, substitute $u=\\beta x$ (so $x=u/\\beta$, $dx=du/\\beta$).", why: "General rule: this substitution always clears $\\beta$ out of the exponent, turning the integral into a bare Gamma-function form." },
+      { tex: "$\\dfrac{\\beta^\\alpha}{\\Gamma(\\alpha)}\\displaystyle\\int_0^\\infty \\left(\\dfrac{u}{\\beta}\\right)^{\\alpha-1}e^{-u}\\,\\dfrac{du}{\\beta} = \\dfrac{\\beta^\\alpha}{\\Gamma(\\alpha)\\beta^\\alpha}\\displaystyle\\int_0^\\infty u^{\\alpha-1}e^{-u}\\,du$.", why: "$(u/\\beta)^{\\alpha-1}\\cdot\\tfrac1\\beta = \\dfrac{u^{\\alpha-1}}{\\beta^{\\alpha-1}}\\cdot\\dfrac1\\beta = \\dfrac{u^{\\alpha-1}}{\\beta^\\alpha}$, and this combines with the $\\beta^\\alpha$ out front." },
+      { tex: "The remaining integral is exactly $\\Gamma(\\alpha)$ by definition, so the whole expression becomes $\\dfrac{\\beta^\\alpha}{\\Gamma(\\alpha)\\beta^\\alpha}\\cdot\\Gamma(\\alpha) = 1$. Confirmed.", why: "" },
+      { tex: "For $E(X)$: $E(X)=\\displaystyle\\int_0^\\infty x\\cdot\\dfrac{\\beta^\\alpha}{\\Gamma(\\alpha)}x^{\\alpha-1}e^{-\\beta x}\\,dx = \\dfrac{\\beta^\\alpha}{\\Gamma(\\alpha)}\\displaystyle\\int_0^\\infty x^{\\alpha}e^{-\\beta x}\\,dx$.", why: "Same substitution idea, but now the power of $x$ is $\\alpha$ instead of $\\alpha-1$ (one higher, from the extra factor of $x$ in $E(X)$)." },
+      { tex: "This integral equals $\\dfrac{\\Gamma(\\alpha+1)}{\\beta^{\\alpha+1}}$ (same substitution, matching the Gamma function definition with exponent $\\alpha$ instead of $\\alpha-1$).", why: "General rule: $\\int_0^\\infty x^k e^{-\\beta x}dx = \\dfrac{\\Gamma(k+1)}{\\beta^{k+1}}$ — worth having as a ready reference." },
+      { tex: "So $E(X) = \\dfrac{\\beta^\\alpha}{\\Gamma(\\alpha)}\\cdot\\dfrac{\\Gamma(\\alpha+1)}{\\beta^{\\alpha+1}} = \\dfrac{\\Gamma(\\alpha+1)}{\\Gamma(\\alpha)\\beta}$. Using $\\Gamma(\\alpha+1)=\\alpha\\Gamma(\\alpha)$: $E(X)=\\dfrac{\\alpha\\Gamma(\\alpha)}{\\Gamma(\\alpha)\\beta}=\\dfrac{\\alpha}{\\beta}$.", why: "General rule: $\\Gamma(\\alpha+1)=\\alpha\\,\\Gamma(\\alpha)$ — the Gamma function's generalization of the factorial identity $n!=n\\cdot(n-1)!$." },
+    ]},
+    { id: "we4-beta-mean", tex: "\\text{Find } E(X) \\text{ for a Beta}(\\alpha,\\beta) \\text{ random variable: } f(x|\\alpha,\\beta)=\\dfrac{\\Gamma(\\alpha+\\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta)}x^{\\alpha-1}(1-x)^{\\beta-1} \\text{ on } [0,1].", answer: "E(X)=\\dfrac{\\alpha}{\\alpha+\\beta}", steps: [
+      { tex: "$E(X) = \\displaystyle\\int_0^1 x\\cdot\\dfrac{\\Gamma(\\alpha+\\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta)}x^{\\alpha-1}(1-x)^{\\beta-1}\\,dx = \\dfrac{\\Gamma(\\alpha+\\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta)}\\displaystyle\\int_0^1 x^{\\alpha}(1-x)^{\\beta-1}\\,dx$.", why: "The extra factor of $x$ bumps the exponent on $x$ from $\\alpha-1$ up to $\\alpha$." },
+      { tex: "Recognize the remaining integral as a Beta FUNCTION: $\\displaystyle\\int_0^1 x^\\alpha(1-x)^{\\beta-1}dx = B(\\alpha+1,\\beta) = \\dfrac{\\Gamma(\\alpha+1)\\Gamma(\\beta)}{\\Gamma(\\alpha+\\beta+1)}$.", why: "General rule: memorize $B(a,b)=\\displaystyle\\int_0^1 x^{a-1}(1-x)^{b-1}dx = \\dfrac{\\Gamma(a)\\Gamma(b)}{\\Gamma(a+b)}$ — the Beta-function identity that unlocks nearly every Beta-distribution moment calculation." },
+      { tex: "Substitute back: $E(X) = \\dfrac{\\Gamma(\\alpha+\\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta)}\\cdot\\dfrac{\\Gamma(\\alpha+1)\\Gamma(\\beta)}{\\Gamma(\\alpha+\\beta+1)}$.", why: "" },
+      { tex: "The $\\Gamma(\\beta)$ terms cancel: $E(X) = \\dfrac{\\Gamma(\\alpha+\\beta)\\,\\Gamma(\\alpha+1)}{\\Gamma(\\alpha)\\,\\Gamma(\\alpha+\\beta+1)}$.", why: "" },
+      { tex: "Use $\\Gamma(\\alpha+1)=\\alpha\\Gamma(\\alpha)$ and $\\Gamma(\\alpha+\\beta+1)=(\\alpha+\\beta)\\Gamma(\\alpha+\\beta)$ to simplify: $E(X) = \\dfrac{\\Gamma(\\alpha+\\beta)\\cdot\\alpha\\Gamma(\\alpha)}{\\Gamma(\\alpha)\\cdot(\\alpha+\\beta)\\Gamma(\\alpha+\\beta)} = \\dfrac{\\alpha}{\\alpha+\\beta}$.", why: "General rule: this same 'shift the exponent, apply the Gamma-recursion identity' pattern also gives you $E(X^2)$ and hence $\\text{Var}(X)$ for the Beta distribution — the same machinery, one more round." },
+    ]},
+  ],
+  5: [
+    { id: "we5-memoryless", tex: "\\text{Show that the exponential distribution is memoryless: } P(X>s+t\\mid X>s)=P(X>t).", answer: "\\text{Proven: both sides equal } e^{-t/\\beta}", steps: [
+      { tex: "Using the same mean parameterization as the rest of this course, $f(x|\\beta)=\\tfrac1\\beta e^{-x/\\beta}$, first find $P(X>x)$: $P(X>x)=1-F(x)=1-(1-e^{-x/\\beta})=e^{-x/\\beta}$.", why: "General rule: for the exponential distribution, $P(X>x)=e^{-x/\\beta}$ is worth having memorized directly — it comes up constantly." },
+      { tex: "By the definition of conditional probability: $P(X>s+t\\mid X>s) = \\dfrac{P(X>s+t \\text{ AND } X>s)}{P(X>s)}$.", why: "General rule: any conditional probability starts from this definition — $P(A|B)=P(A\\cap B)/P(B)$." },
+      { tex: "Since $s+t>s$ (assuming $t>0$), the event '$X>s+t$ AND $X>s$' simplifies to just '$X>s+t$' — if $X$ is bigger than the larger number, it's automatically bigger than the smaller one too.", why: "General rule: when one event implies another, their intersection is just the more restrictive event." },
+      { tex: "$P(X>s+t\\mid X>s) = \\dfrac{P(X>s+t)}{P(X>s)} = \\dfrac{e^{-(s+t)/\\beta}}{e^{-s/\\beta}}$.", why: "" },
+      { tex: "Simplify using exponent rules: $\\dfrac{e^{-(s+t)/\\beta}}{e^{-s/\\beta}} = e^{-(s+t)/\\beta+s/\\beta} = e^{-t/\\beta}$.", why: "$-\\dfrac{s+t}{\\beta}+\\dfrac{s}{\\beta} = \\dfrac{-s-t+s}{\\beta} = -\\dfrac{t}{\\beta}$." },
+      { tex: "This equals $P(X>t) = e^{-t/\\beta}$ exactly — confirming the memoryless property: knowing you've already waited $s$ time units with nothing happening gives you NO information about how much longer you'll wait.", why: "This is a genuinely surprising and important property — the exponential distribution is the ONLY continuous distribution with this property, which is why it models things like radioactive decay and time between random arrivals." },
+    ]},
+    { id: "we5-chebyshev", tex: "\\text{A distribution has mean } \\mu=100 \\text{ and standard deviation } \\sigma=15. \\text{ Use Chebyshev's Inequality to bound } P(|X-100|\\geq30).", answer: "P(|X-100|\\geq30) \\leq 0.25", steps: [
+      { tex: "Chebyshev's Inequality states: $P(|X-\\mu|\\geq k\\sigma) \\leq \\dfrac{1}{k^2}$, for any $k>0$.", why: "General rule: this bound works for ANY distribution with a finite mean and variance — no assumption about shape (normal, skewed, whatever) is needed, which is both its strength and why the bound is fairly loose." },
+      { tex: "Express the given bound, 30, as a multiple of $\\sigma=15$: $30 = 2\\times15 = 2\\sigma$, so $k=2$.", why: "General rule: always convert the raw distance into 'how many standard deviations away' first — Chebyshev's formula is stated in terms of $k$, not the raw distance." },
+      { tex: "Apply the inequality: $P(|X-100|\\geq2\\sigma) \\leq \\dfrac{1}{2^2} = \\dfrac14 = 0.25$.", why: "" },
+      { tex: "So $P(|X-100|\\geq30)\\leq0.25$ — at most a 25% chance $X$ falls more than 30 units from the mean, regardless of the distribution's actual shape.", why: "Worth noting: this is a fairly loose bound — for a Normal distribution specifically, the TRUE probability of being more than $2\\sigma$ away is only about 0.0455, much smaller than Chebyshev's worst-case 0.25. Chebyshev works for anything, but pays for that generality with looseness." },
+    ]},
+  ],
+});
+
+const HW_S1 = [
+  { id: "s1-p1", tex: "\\text{Discrete: } P(X=1)=0.3,\\ P(X=2)=0.5,\\ P(X=3)=0.2. \\text{ Find } E(X) \\text{ and Var}(X).", answer: "E(X)=1.9,\\ \\text{Var}(X)=0.49", steps: [
+    { tex: "$E(X) = 1(0.3)+2(0.5)+3(0.2) = 0.3+1.0+0.6 = 1.9$.", why: "General rule: $E(X)=\\sum xP(x)$ — multiply each value by its probability, add." },
+    { tex: "$E(X^2) = 1^2(0.3)+2^2(0.5)+3^2(0.2) = 0.3+2.0+1.8 = 4.1$.", why: "" },
+    { tex: "$\\text{Var}(X) = E(X^2)-[E(X)]^2 = 4.1-(1.9)^2 = 4.1-3.61 = 0.49$.", why: "" },
+  ]},
+  { id: "s1-p2", tex: "\\text{Let } X\\sim\\text{Uniform}(0,1): f(x)=1 \\text{ for } 0\\leq x\\leq1. \\text{ Find } E(X) \\text{ and Var}(X).", answer: "E(X)=\\tfrac12,\\ \\text{Var}(X)=\\tfrac{1}{12}", steps: [
+    { tex: "$E(X) = \\displaystyle\\int_0^1 x\\cdot1\\,dx = \\left[\\dfrac{x^2}{2}\\right]_0^1 = \\dfrac12$.", why: "" },
+    { tex: "$E(X^2) = \\displaystyle\\int_0^1 x^2\\,dx = \\left[\\dfrac{x^3}{3}\\right]_0^1 = \\dfrac13$.", why: "" },
+    { tex: "$\\text{Var}(X) = \\dfrac13-\\left(\\dfrac12\\right)^2 = \\dfrac13-\\dfrac14 = \\dfrac{4-3}{12}=\\dfrac{1}{12}$.", why: "Worth memorizing: Uniform $(0,1)$ has mean $\\tfrac12$ and variance $\\tfrac{1}{12}$ — this exact result reappears constantly." },
+  ]},
+  { id: "s1-p3", tex: "\\text{Let } f(x)=2(1-x) \\text{ for } 0\\leq x\\leq1. \\text{ Verify this is a valid PDF, then find } E(X).", answer: "\\text{Valid; } E(X)=\\tfrac13", steps: [
+    { tex: "Check it integrates to 1: $\\displaystyle\\int_0^1 2(1-x)\\,dx = 2\\left[x-\\dfrac{x^2}{2}\\right]_0^1 = 2\\left(1-\\dfrac12\\right) = 1$.", why: "Always verify a given density is legitimate before using it further." },
+    { tex: "$E(X) = \\displaystyle\\int_0^1 x\\cdot2(1-x)\\,dx = \\displaystyle\\int_0^1(2x-2x^2)\\,dx = \\left[x^2-\\dfrac{2x^3}{3}\\right]_0^1 = 1-\\dfrac23 = \\dfrac13$.", why: "Distribute the $2x$ across $(1-x)$ before integrating term by term." },
+  ]},
+];
+const REFRESHER_QUIZ_S1 = [
+  { q: "The CDF F(x) is defined as:", options: ["P(X=x)", "P(X<=x)", "P(X>=x)", "The derivative of the PDF"], answer: 1 },
+  { q: "For a continuous random variable, P(X = exactly some value) is:", options: ["Always 1", "Always 0", "Equal to the PDF at that point", "Undefined"], answer: 1 },
+  { q: "Var(X) can be computed as:", options: ["E(X) - E(X^2)", "E(X^2) - [E(X)]^2", "[E(X)]^2 - E(X^2)", "E(X)^2"], answer: 1 },
+  { q: "A CDF F(x) must satisfy:", options: ["It can decrease as x increases", "It is non-decreasing, going from 0 to 1", "It always equals x", "It is always negative"], answer: 1 },
+];
+
+const HW_S2 = [
+  { id: "s2-p1", tex: "\\text{Joint PMF: } P(0,0)=0.2, P(0,1)=0.2, P(1,0)=0.3, P(1,1)=0.3. \\text{ Are } X,Y \\text{ independent?}", answer: "\\text{Yes, independent}", steps: [
+    { tex: "Marginals: $P_X(0)=0.2+0.2=0.4$, $P_X(1)=0.3+0.3=0.6$. $P_Y(0)=0.2+0.3=0.5$, $P_Y(1)=0.2+0.3=0.5$.", why: "" },
+    { tex: "Check every cell: $P(0,0)=0.2$ vs $P_X(0)P_Y(0)=0.4\\times0.5=0.2$ ✓. $P(0,1)=0.2$ vs $0.4\\times0.5=0.2$ ✓. $P(1,0)=0.3$ vs $0.6\\times0.5=0.3$ ✓. $P(1,1)=0.3$ vs $0.6\\times0.5=0.3$ ✓.", why: "General rule: you must check EVERY cell before concluding independence — a single match doesn't prove it, but a single mismatch disproves it." },
+    { tex: "All four cells match their marginal products, so $X$ and $Y$ ARE independent.", why: "" },
+  ]},
+  { id: "s2-p2", tex: "\\text{Using the joint PMF from the previous problem, find Cov}(X,Y).", answer: "\\text{Cov}(X,Y)=0", steps: [
+    { tex: "$E(X) = 0(0.4)+1(0.6)=0.6$. $E(Y)=0(0.5)+1(0.5)=0.5$.", why: "" },
+    { tex: "$E(XY) = 0\\cdot0(0.2)+0\\cdot1(0.2)+1\\cdot0(0.3)+1\\cdot1(0.3) = 0+0+0+0.3=0.3$.", why: "General rule: $E(XY)=\\sum\\sum xy\\,P(x,y)$ — only the term where BOTH $x$ and $y$ are nonzero contributes anything here." },
+    { tex: "$\\text{Cov}(X,Y)=E(XY)-E(X)E(Y) = 0.3-(0.6)(0.5) = 0.3-0.3=0$.", why: "General rule: independent random variables ALWAYS have covariance 0 — this is a necessary consequence of independence (though the reverse isn't always true: zero covariance doesn't guarantee independence in general)." },
+  ]},
+  { id: "s2-p3", tex: "\\text{Given } f(x,y)=6xy^2 \\text{ on } 0<x<1, 0<y<1, \\text{ find the marginal } f_Y(y).", answer: "f_Y(y) = 3y^2", steps: [
+    { tex: "$f_Y(y) = \\displaystyle\\int_0^1 6xy^2\\,dx = 6y^2\\displaystyle\\int_0^1 x\\,dx = 6y^2\\left[\\dfrac{x^2}{2}\\right]_0^1 = 6y^2\\cdot\\dfrac12 = 3y^2$.", why: "General rule: pull anything not involving the integration variable (here, $y^2$) out front before integrating." },
+    { tex: "Check: $\\displaystyle\\int_0^1 3y^2\\,dy = \\left[y^3\\right]_0^1=1$ — valid marginal.", why: "" },
+  ]},
+];
+const REFRESHER_QUIZ_S2 = [
+  { q: "The marginal PMF/PDF of X is obtained by:", options: ["Multiplying by Y", "Summing/integrating the joint over all values of Y", "Setting Y=0", "Taking the derivative"], answer: 1 },
+  { q: "If X and Y are independent, Cov(X,Y) is:", options: ["Always positive", "Always 0", "Always negative", "Undefined"], answer: 1 },
+  { q: "Zero covariance always implies independence:", options: ["True", "False"], answer: 1 },
+  { q: "For independent X and Y, the joint density factors as:", options: ["f(x,y) = f(x) + f(y)", "f(x,y) = f_X(x) f_Y(y)", "f(x,y) = f(x) - f(y)", "f(x,y) is always 1"], answer: 1 },
+];
+
+const HW_S3 = [
+  { id: "s3-p1", tex: "\\text{Find the MGF of a Binomial}(n,\\theta) \\text{ random variable (sum of } n \\text{ i.i.d. Bernoulli}(\\theta)\\text{'s), and use it to confirm } E(X)=n\\theta.", answer: "M(t)=[(1-\\theta)+\\theta e^t]^n;\\quad E(X)=n\\theta", steps: [
+    { tex: "A Binomial $(n,\\theta)$ variable is the SUM of $n$ independent Bernoulli $(\\theta)$ variables: $X=X_1+\\cdots+X_n$.", why: "General rule: recognize a Binomial as 'sum of independent Bernoullis' whenever you need to use MGF properties — this connects two distributions you already know." },
+    { tex: "For independent variables, the MGF of a sum is the PRODUCT of individual MGFs: $M_X(t) = \\left[M_{\\text{Bernoulli}}(t)\\right]^n = \\left[(1-\\theta)+\\theta e^t\\right]^n$.", why: "Using the Bernoulli MGF found earlier in this session." },
+    { tex: "To confirm the mean: $M'(t) = n\\left[(1-\\theta)+\\theta e^t\\right]^{n-1}\\cdot\\theta e^t$ (chain rule).", why: "General rule: differentiating a function raised to a power always brings the exponent down and requires the chain rule on the inside." },
+    { tex: "At $t=0$: $M'(0) = n[(1-\\theta)+\\theta]^{n-1}\\cdot\\theta = n(1)^{n-1}\\theta = n\\theta$.", why: "Since $(1-\\theta)+\\theta=1$, that whole bracket becomes $1$, which is raised to any power without changing." },
+  ]},
+  { id: "s3-p2", tex: "\\text{If } X\\sim N(\\mu,\\sigma^2), \\text{ standardize to find } P(X>\\mu+1.5\\sigma).", answer: "P(Z>1.5)\\approx0.0668", steps: [
+    { tex: "Standardize: $Z=\\dfrac{X-\\mu}{\\sigma}$, so $P(X>\\mu+1.5\\sigma) = P\\left(\\dfrac{X-\\mu}{\\sigma}>\\dfrac{1.5\\sigma}{\\sigma}\\right) = P(Z>1.5)$.", why: "General rule: any Normal probability question converts to a standard Normal ($Z$) question by subtracting the mean and dividing by the standard deviation — this is what lets you use a single standard Normal table for every possible Normal distribution." },
+    { tex: "From the standard Normal table (or known reference values), $P(Z>1.5) \\approx 0.0668$.", why: "" },
+  ]},
+];
+const REFRESHER_QUIZ_S3 = [
+  { q: "M'(0) for an MGF M(t) always equals:", options: ["Var(X)", "E(X)", "0", "1"], answer: 1 },
+  { q: "For independent X and Y, the MGF of X+Y equals:", options: ["M_X(t) + M_Y(t)", "M_X(t) times M_Y(t)", "M_X(t) - M_Y(t)", "max of the two"], answer: 1 },
+  { q: "Two random variables with the same MGF must:", options: ["Have the same mean only", "Have the exact same distribution", "Be independent", "Have variance 0"], answer: 1 },
+  { q: "A Binomial(n,theta) random variable can be thought of as:", options: ["A single Bernoulli trial", "A sum of n independent Bernoulli(theta) trials", "A continuous distribution", "Always equal to n"], answer: 1 },
+];
+
+const HW_S4 = [
+  { id: "s4-p1", tex: "\\text{Show that Gamma}(1,\\beta) \\text{ is the same as the Exponential}(\\beta) \\text{ distribution (rate parameterization).}", answer: "f(x|1,\\beta)=\\beta e^{-\\beta x} = \\text{exponential PDF}", steps: [
+    { tex: "Plug $\\alpha=1$ into the Gamma PDF: $f(x|1,\\beta) = \\dfrac{\\beta^1}{\\Gamma(1)}x^{1-1}e^{-\\beta x} = \\dfrac{\\beta}{\\Gamma(1)}x^0 e^{-\\beta x}$.", why: "" },
+    { tex: "$\\Gamma(1) = \\displaystyle\\int_0^\\infty e^{-u}\\,du = 1$, and $x^0=1$.", why: "$\\Gamma(1)$ is a standard reference value worth knowing — it also matches $0!=1$, consistent with $\\Gamma(n)=(n-1)!$ for integers." },
+    { tex: "So $f(x|1,\\beta) = \\beta e^{-\\beta x}$ — exactly the exponential density with rate $\\beta$.", why: "General rule: the exponential distribution is a special case of the Gamma distribution with shape parameter $\\alpha=1$ — worth remembering when a problem mixes the two." },
+  ]},
+  { id: "s4-p2", tex: "\\text{For Beta}(2,3), \\text{ find } E(X) \\text{ using the formula } E(X)=\\dfrac{\\alpha}{\\alpha+\\beta}.", answer: "E(X) = 0.4", steps: [
+    { tex: "$E(X) = \\dfrac{\\alpha}{\\alpha+\\beta} = \\dfrac{2}{2+3} = \\dfrac{2}{5} = 0.4$.", why: "Direct plug-in using the formula derived in this session's worked example — no need to re-derive from scratch every time." },
+  ]},
+];
+const REFRESHER_QUIZ_S4 = [
+  { q: "The Gamma function satisfies the identity:", options: ["Gamma(a+1) = a * Gamma(a)", "Gamma(a+1) = Gamma(a) + 1", "Gamma(a) = a^2", "Gamma(a+1) = 1/Gamma(a)"], answer: 0 },
+  { q: "Gamma(1, beta) (shape=1) is the same as which distribution?", options: ["Normal", "Exponential", "Uniform", "Beta"], answer: 1 },
+  { q: "The Beta distribution's support (range of values) is:", options: ["All real numbers", "x >= 0", "[0, 1]", "[-1, 1]"], answer: 2 },
+  { q: "E(X) for Beta(alpha, beta) is:", options: ["alpha + beta", "alpha / (alpha+beta)", "alpha * beta", "beta / alpha"], answer: 1 },
+];
+
+const HW_S5 = [
+  { id: "s5-p1", tex: "\\text{A nonnegative random variable has } E(X)=20. \\text{ Use Markov's Inequality to bound } P(X\\geq50).", answer: "P(X\\geq50)\\leq0.4", steps: [
+    { tex: "Markov's Inequality: $P(X\\geq a) \\leq \\dfrac{E(X)}{a}$, valid for any NONNEGATIVE random variable and any $a>0$.", why: "General rule: Markov's Inequality needs almost no assumptions — just that $X\\geq0$ — which makes it very general but also fairly loose." },
+    { tex: "$P(X\\geq50) \\leq \\dfrac{20}{50} = 0.4$.", why: "Direct substitution: $E(X)=20$, $a=50$." },
+  ]},
+  { id: "s5-p2", tex: "\\text{A sample of size } n=100 \\text{ is drawn from a population with } \\mu=50, \\sigma=10. \\text{ Use the CLT to approximate } P(\\bar X>52).", answer: "P(\\bar X>52)\\approx0.0228", steps: [
+    { tex: "By the Central Limit Theorem, $\\bar X$ is approximately Normal with mean $\\mu=50$ and standard deviation $\\dfrac{\\sigma}{\\sqrt n} = \\dfrac{10}{\\sqrt{100}}=\\dfrac{10}{10}=1$.", why: "General rule: the CLT says $\\bar X \\approx N\\left(\\mu, \\dfrac{\\sigma^2}{n}\\right)$ for large $n$ — regardless of the shape of the original population distribution. The standard deviation of $\\bar X$ (sometimes called the 'standard error') is $\\sigma/\\sqrt n$, NOT $\\sigma$ itself." },
+    { tex: "Standardize: $Z = \\dfrac{52-50}{1} = 2$.", why: "Same standardization move as any Normal probability question, using the standard error (1) in place of $\\sigma$." },
+    { tex: "$P(\\bar X>52) = P(Z>2) \\approx 0.0228$ (standard Normal reference value).", why: "" },
+  ]},
+];
+const REFRESHER_QUIZ_S5 = [
+  { q: "The memoryless property is unique to which continuous distribution?", options: ["Normal", "Exponential", "Uniform", "Beta"], answer: 1 },
+  { q: "Markov's Inequality requires the random variable to be:", options: ["Normal", "Nonnegative", "Bounded", "Discrete"], answer: 1 },
+  { q: "Chebyshev's Inequality bounds P(|X-mu| >= k*sigma) by:", options: ["k^2", "1/k^2", "k", "1/k"], answer: 1 },
+  { q: "The CLT says that for large n, the sample mean's distribution is approximately:", options: ["Uniform", "Exponential", "Normal", "Always the same as the population"], answer: 2 },
+];
+
+Object.assign(SESSION_HW_MAP, {
+  1: { data: HW_S1, label: "Random variables, CDFs, expectation & variance - discrete and continuous." },
+  2: { data: HW_S2, label: "Joint distributions, marginals, independence, and covariance." },
+  3: { data: HW_S3, label: "MGFs and common distributions (Binomial, Normal)." },
+  4: { data: HW_S4, label: "Gamma and Beta distribution properties." },
+  5: { data: HW_S5, label: "Markov/Chebyshev inequalities and the Central Limit Theorem." },
+});
+Object.assign(SESSION_QUIZ_MAP, {
+  1: REFRESHER_QUIZ_S1, 2: REFRESHER_QUIZ_S2, 3: REFRESHER_QUIZ_S3, 4: REFRESHER_QUIZ_S4, 5: REFRESHER_QUIZ_S5,
+});
+ALL_PROBLEMS.push(
+  ...HW_S1.map((p) => ({ id: p.id, label: "Random Variables & CDFs", ref: p })),
+  ...HW_S2.map((p) => ({ id: p.id, label: "Joint Distributions", ref: p })),
+  ...HW_S3.map((p) => ({ id: p.id, label: "MGFs & Common Distributions", ref: p })),
+  ...HW_S4.map((p) => ({ id: p.id, label: "Gamma & Beta Distributions", ref: p })),
+  ...HW_S5.map((p) => ({ id: p.id, label: "Inequalities & CLT", ref: p })),
+);
 
 /* ============================================================
    Small building blocks
@@ -1026,7 +1234,7 @@ function RefresherQuiz({ questions, onComplete }) {
 const STEP_LABELS = ["Preview", "Concept", "Example", "Practice", "Refresher", "Complete"];
 
 const SESSION_PREVIEW_GOALS = {
-  6: ["Understand what an estimator and a statistic are", "Apply the Method of Moments recipe: equate theoretical and sample moments", "Know the two rules for choosing k"],
+  6: ["Understand what an estimator and a statistic are", "Apply the Method of Moment recipe: equate theoretical and sample moments", "Know the two rules for choosing k"],
   7: ["Build a likelihood function and log-likelihood function", "Find an MLE via differentiation", "Recognize when MLE requires reasoning about monotonicity instead of calculus"],
   8: ["Understand what makes a statistic 'sufficient'", "Apply the Factorization Theorem to verify sufficiency", "Know the one-to-one-function property of sufficient statistics"],
   9: ["Recognize the exponential family template", "Convert a density into exponential family form", "Read off the sufficient statistic directly from that form"],
