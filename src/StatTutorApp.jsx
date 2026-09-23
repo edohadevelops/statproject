@@ -67,7 +67,7 @@ const DARK_VARS = {
 };
 
 const ME = "Amen";
-const TEST1_DATE = "2026-10-03"; // estimate — first week of October, adjust once confirmed
+const TEST1_DATE = "2026-10-02"; // Test 1 — Friday Oct 2 (change to "2026-09-25" if it's this Friday)
 const FINAL_DATE = "2026-12-09"; // confirmed from syllabus: Wed Dec 9, 8:45-10:45am
 
 /* ---------- KaTeX loader ---------- */
@@ -109,17 +109,31 @@ function PureMath({ tex, block, style }) {
   );
 }
 
-/* Math_ handles two conventions, correctly, from day one (this was a
-   real bug fixed the hard way in the Calc 2 app — not repeating it):
-   1. Pure LaTeX, no literal "$" characters — whole string to KaTeX.
-   2. Prose with inline $...$-delimited math — split so English stays
-      as plain text and only the math parts go through KaTeX. */
+/* Math_ handles three cases:
+   1. Pure LaTeX, no literal "$" characters, containing at least one
+      backslash command — whole string to KaTeX.
+   2. Plain English with no "$" and no backslash command — rendered as
+      ordinary text (never sent to KaTeX, which would italicize it and
+      strip the spaces).
+   3. Prose with inline $...$-delimited math — split so English stays
+      as plain text and only the math parts go through KaTeX.
+   NOTE: the split regex below uses [$] instead of an escaped dollar sign
+   on purpose. It contains no backslashes, so the byte-level escaping
+   check can never "fix" it into a broken pattern again. */
 function Math_({ tex, block, style }) {
   if (!tex) return null;
   if (!tex.includes("$")) {
-    return <PureMath tex={tex} block={block} style={style} />;
+    if (/\\[a-zA-Z]/.test(tex)) {
+      return <PureMath tex={tex} block={block} style={style} />;
+    }
+    const Tag = block ? "div" : "span";
+    return (
+      <Tag style={{ display: block ? "block" : "inline", margin: block ? "8px 0" : 0, lineHeight: 1.6, ...style }}>
+        {tex}
+      </Tag>
+    );
   }
-  const parts = tex.split(/(\\$[^$]+\\$)/g).filter((p) => p.length > 0);
+  const parts = tex.split(/([$][^$]+[$])/g).filter((p) => p.length > 0);
   return (
     <div style={{ display: block ? "block" : "inline", margin: block ? "8px 0" : 0, lineHeight: 1.6, ...style }}>
       {parts.map((part, i) =>
@@ -136,10 +150,13 @@ function Math_({ tex, block, style }) {
 /* ---------- Supabase persistence ----------
    Fill in your own project's URL and anon key below once you've
    created it — everything else works as soon as those two lines
-   are real. */
+   are real. Until then, progress is saved to this device's
+   localStorage so nothing is lost on reload. */
 const SUPABASE_URL = "YOUR_SUPABASE_URL_HERE";
 const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY_HERE";
 const SB_HEADERS = { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` };
+const SB_CONFIGURED = /^https?:/.test(SUPABASE_URL);
+const LOCAL_KEY = (key) => `tutor:${ME}:${key}`;
 
 const pendingWrites = new Map();
 let syncListeners = [];
@@ -150,6 +167,14 @@ function subscribeSync(fn) {
 }
 
 async function loadState(key, fallback) {
+  if (!SB_CONFIGURED) {
+    try {
+      const raw = localStorage.getItem(LOCAL_KEY(key));
+      return raw === null ? fallback : JSON.parse(raw);
+    } catch {
+      return fallback;
+    }
+  }
   try {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/tutor_state?id=eq.${encodeURIComponent(`${ME}:${key}`)}&select=payload`,
@@ -188,6 +213,15 @@ async function flushPendingWrites() {
   if (anyFailed) { notifySync("offline"); scheduleRetry(8000); } else { notifySync("saved"); }
 }
 async function saveState(key, value) {
+  if (!SB_CONFIGURED) {
+    try {
+      localStorage.setItem(LOCAL_KEY(key), JSON.stringify(value));
+      notifySync("local");
+    } catch {
+      notifySync("offline");
+    }
+    return;
+  }
   pendingWrites.set(key, value);
   notifySync("syncing");
   try {
@@ -201,12 +235,13 @@ if (typeof window !== "undefined") {
 }
 
 function SyncIndicator() {
-  const [status, setStatus] = useState("saved");
+  const [status, setStatus] = useState(SB_CONFIGURED ? "saved" : "local");
   useEffect(() => subscribeSync(setStatus), []);
   const map = {
     saved: { label: "Synced", color: T.chalkDim, dot: T.amber },
     syncing: { label: "Saving...", color: T.chalkDim, dot: T.blue },
     offline: { label: "Offline - will retry", color: T.coral, dot: T.coral },
+    local: { label: "Saved on this device", color: T.chalkDim, dot: T.blue },
   };
   const m = map[status];
   return (
@@ -231,10 +266,10 @@ const SESSIONS = [
   { id: 3, title: "Moments, MGFs & Common Distributions", lectures: "Lec 3", type: "review" },
   { id: 4, title: "Gamma & Beta Distributions", lectures: "Lec 4", type: "review" },
   { id: 5, title: "Exponential Distribution, Inequalities & CLT", lectures: "Lec 5", type: "review" },
-  { id: 6, title: "Parameter Estimation & Method of Moment", lectures: "Lec 6-7", type: "new", test: "Test 1 likely covers through here" },
-  { id: 7, title: "Maximum Likelihood Estimation", lectures: "Lec 8-11", type: "new", test: "Test 1 likely covers through here" },
-  { id: 8, title: "Sufficient Statistics & Factorization Theorem", lectures: "Lec 13-15", type: "new" },
-  { id: 9, title: "Exponential Family of Distributions", lectures: "Lec 16-17", type: "new" },
+  { id: 6, title: "Parameter Estimation & Method of Moment", lectures: "Lec 6-7", type: "new", test: "Test 1" },
+  { id: 7, title: "Maximum Likelihood Estimation", lectures: "Lec 8-11", type: "new", test: "Test 1" },
+  { id: 8, title: "Sufficient Statistics & Factorization Theorem", lectures: "Lec 13-15", type: "new", test: "Test 1" },
+  { id: 9, title: "Exponential Family of Distributions", lectures: "Lec 16-17", type: "new", test: "Test 1" },
   { id: 10, title: "Chi-Square & t-Distributions", lectures: "Lec 17-19", type: "new" },
   { id: 11, title: "Sampling Distributions of Sample Mean & Variance", lectures: "Lec 20-22", type: "new" },
   { id: 12, title: "Confidence Intervals", lectures: "Lec 22-25", type: "new" },
@@ -1641,7 +1676,7 @@ function Dashboard({ currentSessionId, hwState, tasks, onSelectSession, onStartS
   const today = new Date(); today.setHours(0,0,0,0);
   const test1 = new Date(TEST1_DATE);
   const finalD = new Date(FINAL_DATE);
-  const nextMilestone = test1 >= today ? { label: "Test 1 (estimated)", date: test1 } : { label: "Final Exam", date: finalD };
+  const nextMilestone = test1 >= today ? { label: "Test 1", date: test1 } : { label: "Final Exam", date: finalD };
   const daysLeft = Math.max(0, Math.ceil((nextMilestone.date - today) / 86400000));
   const weakCount = Object.values(hwState).filter((v) => v === "miss").length;
   const todayStr = dateStr(new Date());
