@@ -484,7 +484,7 @@ const WORKED_EXAMPLES = {
     ]},
   ],
   7: [
-    { id: "we7-ex1", tex: "\\text{Same discrete setup as the MoM example. Find the MLE } \\hat\\theta.", answer: "\\hat\\theta = 0.5", steps: [
+    { id: "we7-ex1", tex: "\\text{Discrete } X: P(0)=\\tfrac{2\\theta}{3}, P(1)=\\tfrac{\\theta}{3}, P(2)=\\tfrac{2(1-\\theta)}{3}, P(3)=\\tfrac{1-\\theta}{3}. \\text{ Data: } 3,0,2,1,3,2,1,0,2,1. \\text{ Find the MLE } \\hat\\theta.", answer: "\\hat\\theta = 0.5", steps: [
       { tex: "Write the likelihood as a product matching the observed data $(3,0,2,1,3,2,1,0,2,1)$: count how many times each value appears — $0$ appears twice, $1$ appears three times, $2$ appears three times, $3$ appears twice.", why: "General rule: for repeated discrete data, group by value and count frequencies rather than writing out all 10 factors separately — it's the same product, just organized." },
       { tex: "$L(\\theta) = P(0)^2 P(1)^3 P(2)^3 P(3)^2 = \\left(\\tfrac{2\\theta}{3}\\right)^2\\left(\\tfrac{\\theta}{3}\\right)^3\\left(\\tfrac{2(1-\\theta)}{3}\\right)^3\\left(\\tfrac{1-\\theta}{3}\\right)^2$.", why: "" },
       { tex: "Take the log: $l(\\theta) = 2\\log\\tfrac{2\\theta}{3}+3\\log\\tfrac{\\theta}{3}+3\\log\\tfrac{2(1-\\theta)}{3}+2\\log\\tfrac{1-\\theta}{3}$.", why: "" },
